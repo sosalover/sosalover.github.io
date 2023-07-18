@@ -14,24 +14,3 @@ body { padding: 0; margin: 0 }
 #unity-build-title { float: right; margin-right: 10px; line-height: 38px; font-family: arial; font-size: 18px }
 #unity-fullscreen-button { float: right; width: 38px; height: 38px; background: url('fullscreen-button.png') no-repeat center }
 #unity-mobile-warning { position: absolute; left: 50%; top: 5%; transform: translate(-50%); background: white; padding: 10px; display: none }
-
-button{
-    margin: 16px 0;
-  }
- button{
-    outline: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: 200;
-    background: #768bc5;
-    color: #fff;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: all 0.4s ease;
-  }
- button button:hover{
-    border-color: #768bc5;
-    background-color: #fff;
-    color: #768bc5;
-  }

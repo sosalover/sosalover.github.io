@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { csvStringToJson, fetchGoogleSheet } from '$lib/data/digital-garden';
 	import DigitalGardenModal from '../../components/DigitalGardenModal.svelte';
 	type Item = {
 		title: string;
@@ -26,6 +25,7 @@
 		[0, 0, 1, 0, 0, 1, 0, 0],
 		[0, 0, 1, 0, 0, 1, 0, 0]
 	];
+	const harvestingControlsList = ['press space', 'press 1', 'press 2', 'press 3'];
 	let items: Array<Array<null | Item>> = Array(8)
 		.fill(null)
 		.map(() => Array(8).fill(null));
@@ -110,45 +110,75 @@
 	}
 </script>
 
-<div class="grid-container">
-	<div class="grid">
-		{#each Array(gridSize) as _, rowIndex}
-			{#each Array(gridSize) as _, colIndex}
-				<div
-					class="cell h-full"
-					class:backgroundCell={legalPath[rowIndex][colIndex] === 0 &&
-						items[rowIndex][colIndex] === null}
-					class:yellow={legalPath[rowIndex][colIndex] === 1}
-					style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};"
-				>
-					{#if playerPosition.x === colIndex && playerPosition.y === rowIndex}
-						<img
-							src={playerSprite}
-							alt="Player"
-							class="w-full h-full object-contain absolute player"
-						/>
-					{/if}
-					{#if items[rowIndex][colIndex] !== null}
-						<div class="backgroundCell h-full">
-							<img
-								src={`../src/images/digital-garden-icons/${items[rowIndex][colIndex].icon}.png`}
-								class=" w-full h-full object-cover absolute inset-0"
-								alt={items[rowIndex][colIndex].icon}
-							/>
+<div class="flex flex-col md:flex-row bg-gray-800 items-center justify-center">
+	<!-- Header -->
+	<header class="text-center p-4 bg-gray-800 text-white">
+		<h1 class="text-3xl">Digital Garden</h1>
+	</header>
+
+	<!-- Main Content Section (Grid and Preview Panel) -->
+	<div class="flex-1 p-4">
+		<div class="grid-container">
+			<div class="grid grid-cols-8 grid-rows-8">
+				{#each Array(gridSize) as _, rowIndex}
+					{#each Array(gridSize) as _, colIndex}
+						<div
+							class="cell h-full"
+							class:backgroundCell={legalPath[rowIndex][colIndex] === 0 &&
+								items[rowIndex][colIndex] === null}
+							class:yellow={legalPath[rowIndex][colIndex] === 1}
+							style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};"
+						>
+							{#if playerPosition.x === colIndex && playerPosition.y === rowIndex}
+								<img
+									src={playerSprite}
+									alt="Player"
+									class="w-full h-full object-contain absolute player"
+								/>
+							{/if}
+							{#if items[rowIndex][colIndex] !== null}
+								<div class="backgroundCell h-full">
+									<img
+										src={`../src/images/digital-garden-icons/${items[rowIndex][colIndex].icon}.png`}
+										class="w-full h-full object-cover absolute inset-0"
+										alt={items[rowIndex][colIndex].icon}
+									/>
+								</div>
+							{/if}
 						</div>
-					{/if}
-				</div>
-			{/each}
+					{/each}
+				{/each}
+			</div>
+		</div>
+	</div>
+
+	<!-- Controls and Preview Panel (Desktop: Right, Mobile: Below) -->
+	<div class="md:w-1/3 mt-4 md:mt-0 md:p-4 flex flex-col items-center">
+		<!-- Controls -->
+		<p class=" text-white">Controls</p>
+		<div class="controls">
+			<button onclick={() => movePlayer('up')} disabled={!canMove('up')}>Up</button>
+			<button onclick={() => movePlayer('down')} disabled={!canMove('down')}>Down</button>
+			<button onclick={() => movePlayer('left')} disabled={!canMove('left')}>Left</button>
+			<button onclick={() => movePlayer('right')} disabled={!canMove('right')}>Right</button>
+		</div>
+
+		<p class=" text-white">Harvest</p>
+		{#each availableItems as item, index}
+			<button
+				class="bg-blue-500 text-white py-2 px-4 rounded m-2"
+				onclick={() => {
+					selectedItem = item;
+					showModal = true;
+				}}
+			>
+				{item?.title}
+			</button>
+			<p class="text-white hidden md:flex">{`(${harvestingControlsList[index]})`}</p>
 		{/each}
 	</div>
 </div>
 
-<div class="controls">
-	<button onclick={() => movePlayer('up')} disabled={!canMove('up')}>Up</button>
-	<button onclick={() => movePlayer('down')} disabled={!canMove('down')}>Down</button>
-	<button onclick={() => movePlayer('left')} disabled={!canMove('left')}>Left</button>
-	<button onclick={() => movePlayer('right')} disabled={!canMove('right')}>Right</button>
-</div>
 <DigitalGardenModal bind:showModal {...selectedItem}><div></div></DigitalGardenModal>
 
 <svelte:window on:keydown|preventDefault={onKeyDown} />
@@ -179,9 +209,8 @@
 		background-position: center;
 	}
 	.controls {
-		margin-top: 20px;
+		margin-top: 8px;
 		display: flex;
-		justify-content: center;
 		gap: 10px;
 		margin-bottom: 40px;
 	}

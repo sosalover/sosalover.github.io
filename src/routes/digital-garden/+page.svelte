@@ -13,7 +13,7 @@
   let playerPosition = $state({ x: 2, y: 0 });
   let { data } = $props();
   const sheetData = data.sheetData.slice(1);
-  const playerSprite = "../src/images/playerSprite.webp";
+  const playerSprite = "/images/playerSprite.webp";
   const gridSize = 8;
   const legalPath = [
     [0, 0, 1, 0, 0, 1, 0, 0],

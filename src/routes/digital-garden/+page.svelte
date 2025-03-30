@@ -62,7 +62,16 @@
 			movePlayer('right');
 		} else if (event.key === ' ') {
 			selectedItem = availableItems?.at(0) ?? null;
-			if (availableItems.length > 0) showModal = true;
+			if (selectedItem) showModal = true;
+		} else if (event.key === '1') {
+			selectedItem = availableItems?.at(1) ?? null;
+			if (selectedItem) showModal = true;
+		} else if (event.key === '2') {
+			selectedItem = availableItems?.at(2) ?? null;
+			if (selectedItem) showModal = true;
+		} else if (event.key === '3') {
+			selectedItem = availableItems?.at(3) ?? null;
+			if (selectedItem) showModal = true;
 		}
 	}
 
@@ -137,10 +146,10 @@
 								/>
 							{/if}
 							{#if items[rowIndex][colIndex] !== null}
-								<div class="backgroundCell h-full">
+								<div class="backgroundCell h-full w-full flex items-center justify-center">
 									<img
 										src={`../src/images/digital-garden-icons/${items[rowIndex][colIndex].icon}.png`}
-										class="w-full h-full object-cover absolute inset-0"
+										class="w-3/4 h-3/4 md:w-1/2 md:h-1/2 object-cover absolute"
 										alt={items[rowIndex][colIndex].icon}
 									/>
 								</div>

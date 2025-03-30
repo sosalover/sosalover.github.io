@@ -1,12 +1,20 @@
-<script>
+<script lang="ts">
+	import { csvStringToJson, fetchGoogleSheet } from '$lib/data/digital-garden';
 	import DigitalGardenModal from '../../components/DigitalGardenModal.svelte';
-
+	type Item = {
+		title: string;
+		image: string;
+		link: string;
+		text: string;
+		icon: string;
+		label: string;
+	};
 	let showModal = $state(false);
-	let selectedItem = $state('');
-	let playerPosition = $state({ x: 2, y: 0 }); // Initial position of the player at (0, 0)
-	const playerSprite = '../src/images/playerSprite.webp'; // Adjust path as necessary
-	// @ts-ignore
-	const pathBackground = '../src/images/pathBackground.jpg';
+	let selectedItem: Item | null = $state(null);
+	let playerPosition = $state({ x: 2, y: 0 });
+	let { data } = $props();
+	const sheetData = data.sheetData.slice(1);
+	const playerSprite = '../src/images/playerSprite.webp';
 	const gridSize = 8;
 	const legalPath = [
 		[0, 0, 1, 0, 0, 1, 0, 0],
@@ -18,17 +26,19 @@
 		[0, 0, 1, 0, 0, 1, 0, 0],
 		[0, 0, 1, 0, 0, 1, 0, 0]
 	];
-	let items = [
-		[0, 'SCROOCHIE', 0, 0, 0, 0, 'POOKIE', 0],
-		[0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0]
-	];
-	const getAvailableItems = (/** @type {number} */ colIndex, /** @type {number} */ rowIndex) => {
+	let items: Array<Array<null | Item>> = Array(8)
+		.fill(null)
+		.map(() => Array(8).fill(null));
+
+	sheetData.forEach((item) => {
+		const { itemPosition, ...rest } = item;
+		const position = itemPosition.split('-');
+		items[Number(position[0])][Number(position[1])] = rest;
+	});
+	const getAvailableItems = (
+		/** @type {number} */ colIndex: number,
+		/** @type {number} */ rowIndex: number
+	) => {
 		const availableItems = [];
 		if (items[rowIndex + 1]?.[colIndex]) availableItems.push(items[rowIndex + 1][colIndex]);
 		if (items[rowIndex - 1]?.[colIndex]) availableItems.push(items[rowIndex - 1][colIndex]);
@@ -41,7 +51,7 @@
 	/**
 	 * @param {{ key: string; }} event
 	 */
-	function onKeyDown(event) {
+	function onKeyDown(event: KeyboardEvent) {
 		if (event.key === 'ArrowUp') {
 			movePlayer('up');
 		} else if (event.key === 'ArrowDown') {
@@ -51,7 +61,7 @@
 		} else if (event.key === 'ArrowRight') {
 			movePlayer('right');
 		} else if (event.key === ' ') {
-			selectedItem = String(availableItems?.at(0)) ?? '';
+			selectedItem = availableItems?.at(0) ?? null;
 			if (availableItems.length > 0) showModal = true;
 		}
 	}
@@ -59,7 +69,7 @@
 	/**
 	 * @param {'up' | 'down' | 'left' | 'right'} direction
 	 */
-	function canMove(direction) {
+	function canMove(direction: 'up' | 'down' | 'left' | 'right') {
 		if (direction === 'up') {
 			return playerPosition.y > 0 && legalPath[playerPosition.y - 1][playerPosition.x] === 1;
 		} else if (direction === 'down') {
@@ -79,7 +89,7 @@
 	/**
 	 * @param {'up' | 'down' | 'left' | 'right'} direction
 	 */
-	function movePlayer(direction) {
+	function movePlayer(direction: 'up' | 'down' | 'left' | 'right') {
 		let newX = playerPosition.x;
 		let newY = playerPosition.y;
 
@@ -93,55 +103,11 @@
 			newX += 1;
 		}
 
-		// Check if the new position is a legal path (1)
 		if (legalPath[newY][newX] === 1) {
 			playerPosition = { x: newX, y: newY };
 			availableItems = getAvailableItems(playerPosition.x, playerPosition.y);
 		}
 	}
-	let data = '';
-	async function fetchCSV() {
-		const sheetId = '157-hKxR5BwVdJ_aT3dQs4wQtGA9d50CnNTrpigENczs';
-		const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
-
-		try {
-			const response = await fetch(url);
-			const csvText = await response.text();
-			data = csvText;
-		} catch (error) {
-			console.error('Error fetching CSV:', error);
-		}
-	}
-
-	/**
-	 * @param {string} csvString
-	 */
-	function dataToJson(csvString) {
-		const rows = csvString.trim().split('\n');
-
-		// Define the static labels for the fields
-		// Map each row to the corresponding label
-		return rows.map((row) => {
-			const rowEntries = row.split(',');
-
-			// Handle quotes: explicitly clean up the cells
-			const cleanedRowEntries = rowEntries.map((cell) => {
-				// Remove quotes and trim any unnecessary spaces
-				return cell.replace(/"/g, '').trim();
-			});
-			return {
-				itemPosition: cleanedRowEntries[0],
-				title: cleanedRowEntries[1],
-				image: cleanedRowEntries[2],
-				link: cleanedRowEntries[3],
-				text: cleanedRowEntries[4],
-				icon: cleanedRowEntries[5],
-				label: cleanedRowEntries[6]
-			};
-		});
-	}
-
-	fetchCSV().then(() => console.log(dataToJson(data)));
 </script>
 
 <div class="grid-container">
@@ -149,9 +115,9 @@
 		{#each Array(gridSize) as _, rowIndex}
 			{#each Array(gridSize) as _, colIndex}
 				<div
-					class="cell"
+					class="cell h-full"
 					class:backgroundCell={legalPath[rowIndex][colIndex] === 0 &&
-						items[rowIndex][colIndex] === 0}
+						items[rowIndex][colIndex] === null}
 					class:yellow={legalPath[rowIndex][colIndex] === 1}
 					style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};"
 				>
@@ -162,8 +128,14 @@
 							class="w-full h-full object-contain absolute player"
 						/>
 					{/if}
-					{#if items[rowIndex][colIndex] !== 0}
-						<div class="absolute">{items[rowIndex][colIndex]}</div>
+					{#if items[rowIndex][colIndex] !== null}
+						<div class="backgroundCell h-full">
+							<img
+								src={`../src/images/digital-garden-icons/${items[rowIndex][colIndex].icon}.png`}
+								class=" w-full h-full object-cover absolute inset-0"
+								alt={items[rowIndex][colIndex].icon}
+							/>
+						</div>
 					{/if}
 				</div>
 			{/each}
@@ -177,7 +149,7 @@
 	<button onclick={() => movePlayer('left')} disabled={!canMove('left')}>Left</button>
 	<button onclick={() => movePlayer('right')} disabled={!canMove('right')}>Right</button>
 </div>
-<DigitalGardenModal bind:showModal title={selectedItem}><h1>{selectedItem}</h1></DigitalGardenModal>
+<DigitalGardenModal bind:showModal {...selectedItem}><div></div></DigitalGardenModal>
 
 <svelte:window on:keydown|preventDefault={onKeyDown} />
 

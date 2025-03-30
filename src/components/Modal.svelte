@@ -8,21 +8,20 @@
 	});
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
 <dialog
 	bind:this={dialog}
 	onclose={() => (showModal = false)}
 	onclick={(e) => {
 		if (e.target === dialog) dialog.close();
 	}}
+	class="md:left-1/4 md:min-w-1/2 transition-transform transform"
 >
-	<div>
+	<div class="modal-content">
 		{@render header?.()}
 		<hr />
 		{@render children?.()}
 		<hr />
-		<!-- svelte-ignore a11y_autofocus -->
-		<button autofocus onclick={() => dialog.close()}>close modal</button>
+		<button onclick={() => dialog.close()}>Close Modal</button>
 	</div>
 </dialog>
 
@@ -32,36 +31,70 @@
 		border-radius: 0.2em;
 		border: none;
 		padding: 0;
+		position: fixed;
+		top: 25%;
+		overflow: hidden;
+		z-index: 50;
+		min-height: 50%;
+		max-height: 50%;
 	}
+
 	dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);
 	}
-	dialog > div {
+
+	dialog > .modal-content {
 		padding: 1em;
+		background: white;
+		border-radius: 0.5em;
+		width: 100%;
+		max-height: 90vh;
+		overflow-y: auto;
 	}
+
+	/* For the mobile view */
 	dialog[open] {
-		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+		animation: slideUpMobile 0.3s ease-out;
 	}
-	@keyframes zoom {
+
+	/* Desktop - Centered modal */
+	@media (min-width: 640px) {
+		dialog[open] {
+			animation: slideUpDesktop 0.3s ease-out;
+		}
+	}
+
+	@keyframes slideUpMobile {
 		from {
-			transform: scale(0.95);
+			transform: translateY(100%);
 		}
 		to {
-			transform: scale(1);
+			transform: translateY(0);
 		}
 	}
-	dialog[open]::backdrop {
-		animation: fade 0.2s ease-out;
-	}
-	@keyframes fade {
+
+	@keyframes slideUpDesktop {
 		from {
-			opacity: 0;
+			transform: translateY(10%);
 		}
 		to {
-			opacity: 1;
+			transform: translateY(0);
 		}
 	}
+
+	/* Button styling */
 	button {
 		display: block;
+		margin-top: 1em;
+		padding: 0.5em;
+		border: none;
+		background-color: #4caf50;
+		color: white;
+		cursor: pointer;
+		border-radius: 0.25em;
+	}
+
+	button:hover {
+		background-color: #45a049;
 	}
 </style>

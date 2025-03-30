@@ -162,6 +162,8 @@
     as="image"
     href={"/images/digital-garden-icons/wheat.png"}
   />
+  <link rel="preload" as="image" href={"/images/pathBackground.avif"} />
+  <link rel="preload" as="image" href={"/images/grassBackground.jpg"} />
 </svelte:head>
 
 <div class="flex flex-col md:flex-row bg-gray-800 items-center justify-center">

@@ -5,6 +5,7 @@
 	let selectedItem = $state('');
 	let playerPosition = $state({ x: 2, y: 0 }); // Initial position of the player at (0, 0)
 	const playerSprite = '../src/images/playerSprite.webp'; // Adjust path as necessary
+	const pathBackground = '../src/images/pathBackground.jpg';
 	const gridSize = 8;
 	const legalPath = [
 		[0, 0, 1, 0, 0, 1, 0, 0],
@@ -105,6 +106,8 @@
 			{#each Array(gridSize) as _, colIndex}
 				<div
 					class="cell"
+					class:backgroundCell={legalPath[rowIndex][colIndex] === 0 &&
+						items[rowIndex][colIndex] === 0}
 					class:yellow={legalPath[rowIndex][colIndex] === 1}
 					style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};"
 				>
@@ -125,10 +128,10 @@
 </div>
 
 <div class="controls">
-	<button on:click={() => movePlayer('up')} disabled={!canMove('up')}>Up</button>
-	<button on:click={() => movePlayer('down')} disabled={!canMove('down')}>Down</button>
-	<button on:click={() => movePlayer('left')} disabled={!canMove('left')}>Left</button>
-	<button on:click={() => movePlayer('right')} disabled={!canMove('right')}>Right</button>
+	<button onclick={() => movePlayer('up')} disabled={!canMove('up')}>Up</button>
+	<button onclick={() => movePlayer('down')} disabled={!canMove('down')}>Down</button>
+	<button onclick={() => movePlayer('left')} disabled={!canMove('left')}>Left</button>
+	<button onclick={() => movePlayer('right')} disabled={!canMove('right')}>Right</button>
 </div>
 <DigitalGardenModal bind:showModal title={selectedItem}><h1>{selectedItem}</h1></DigitalGardenModal>
 
@@ -139,24 +142,26 @@
 		display: grid;
 		grid-template-columns: repeat(gridSize, 1fr);
 		grid-template-rows: repeat(gridSize, 1fr);
-		gap: 5px;
 		width: 100%;
 		height: 100%;
 		margin: 0 auto;
 	}
 
 	.cell {
-		border: 1px solid #ccc;
 		background-color: #f9f9f9;
 		position: relative;
 	}
 	.yellow {
-		background-color: yellowgreen;
+		background-image: url('../src/images/pathBackground.avif');
+		background-size: cover;
+		background-position: center;
 	}
 
-	.player {
+	.backgroundCell {
+		background-image: url('../src/images/grassBackground.jpg');
+		background-size: cover;
+		background-position: center;
 	}
-
 	.controls {
 		margin-top: 20px;
 		display: flex;

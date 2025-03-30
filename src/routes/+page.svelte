@@ -21,7 +21,7 @@
 		<p class="text-xl text-gray-600 mt-4">Software Developer | Northwestern University Graduate</p>
 		<div class="mt-8">
 			<a
-				href="/Thomas_Moh_SE_Resume.pdf"
+				href="../src/Thomas_Moh_SE_Resume.pdf"
 				download="ThomasMoh_Resume"
 				class="bg-blue-500 text-white py-2 px-6 rounded hover:bg-blue-600">Download Resume</a
 			>

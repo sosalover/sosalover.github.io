@@ -136,6 +136,34 @@
   }
 </script>
 
+<svelte:head>
+  <link
+    rel="preload"
+    as="image"
+    href={"/images/digital-garden-icons/blueberry.png"}
+  />
+  <link
+    rel="preload"
+    as="image"
+    href={"/images/digital-garden-icons/carrot.png"}
+  />
+  <link
+    rel="preload"
+    as="image"
+    href={"/images/digital-garden-icons/strawberry.png"}
+  />
+  <link
+    rel="preload"
+    as="image"
+    href={"/images/digital-garden-icons/tomato.png"}
+  />
+  <link
+    rel="preload"
+    as="image"
+    href={"/images/digital-garden-icons/wheat.png"}
+  />
+</svelte:head>
+
 <div class="flex flex-col md:flex-row bg-gray-800 items-center justify-center">
   <!-- Header -->
   <header class="text-center p-4 bg-gray-800 text-white">

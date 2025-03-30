@@ -23,7 +23,7 @@
     </p>
     <div class="mt-8">
       <a
-        href="facebook.com"
+        href="www.facebook.com"
         download="ThomasMoh_Resume"
         class="bg-blue-500 text-white py-2 px-6 rounded hover:bg-blue-600"
         >Download Resume</a

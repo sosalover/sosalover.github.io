@@ -14,26 +14,35 @@
   let { data } = $props();
   const sheetData = data.sheetData.slice(1);
   const playerSprite = "/images/playerSprite.webp";
-  const gridSize = 8;
+  const gridSize = 16;
   const legalPath = [
-    [0, 0, 1, 0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0, 1, 0, 0],
-    [1, 1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 1, 0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0, 1, 0, 0],
-    [1, 1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 1, 0, 0, 1, 0, 0],
-    [0, 0, 1, 0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1],
+    [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+    [0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+    [0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1],
+    [0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0],
+    [0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0],
+    [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
   ];
+
   const harvestingControlsList = [
     "press space",
     "press 1",
     "press 2",
     "press 3",
   ];
-  let items: Array<Array<null | Item>> = Array(8)
+  let items: Array<Array<null | Item>> = Array(gridSize)
     .fill(null)
-    .map(() => Array(8).fill(null));
+    .map(() => Array(gridSize).fill(null));
 
   sheetData.forEach((item) => {
     const { itemPosition, ...rest } = item;
@@ -45,13 +54,25 @@
     /** @type {number} */ rowIndex: number,
   ) => {
     const availableItems = [];
-    if (items[rowIndex + 1]?.[colIndex])
+    if (
+      items[rowIndex + 1]?.[colIndex] &&
+      items[rowIndex + 1]?.[colIndex]?.label !== "yes"
+    )
       availableItems.push(items[rowIndex + 1][colIndex]);
-    if (items[rowIndex - 1]?.[colIndex])
+    if (
+      items[rowIndex - 1]?.[colIndex] &&
+      items[rowIndex - 1]?.[colIndex]?.label !== "yes"
+    )
       availableItems.push(items[rowIndex - 1][colIndex]);
-    if (items[rowIndex]?.[colIndex + 1])
+    if (
+      items[rowIndex]?.[colIndex + 1] &&
+      items[rowIndex]?.[colIndex + 1]?.label !== "yes"
+    )
       availableItems.push(items[rowIndex][colIndex + 1]);
-    if (items[rowIndex]?.[colIndex - 1])
+    if (
+      items[rowIndex]?.[colIndex - 1] &&
+      items[rowIndex]?.[colIndex - 1]?.label !== "yes"
+    )
       availableItems.push(items[rowIndex][colIndex - 1]);
     return availableItems;
   };
@@ -162,7 +183,7 @@
     as="image"
     href={"/images/digital-garden-icons/wheat.png"}
   />
-  <link rel="preload" as="image" href={"/images/pathBackground.avif"} />
+  <link rel="preload" as="image" href={"/images/pathBackground.jpg"} />
   <link rel="preload" as="image" href={"/images/grassBackground.jpg"} />
 </svelte:head>
 
@@ -175,7 +196,7 @@
   <!-- Main Content Section (Grid and Preview Panel) -->
   <div class="flex-1 p-4">
     <div class="grid-container">
-      <div class="grid grid-cols-8 grid-rows-8">
+      <div class="grid grid-cols-16 grid-rows-16">
         {#each Array(gridSize) as _, rowIndex}
           {#each Array(gridSize) as _, colIndex}
             <div
@@ -199,7 +220,7 @@
                   <img
                     src={`/images/digital-garden-icons/${items[rowIndex][colIndex].icon}.png`}
                     class="w-3/4 h-3/4 md:w-1/2 md:h-1/2 object-cover absolute"
-                    alt={items[rowIndex][colIndex].icon}
+                    alt={items[rowIndex][colIndex]?.icon}
                   />
                 </div>
               {/if}
@@ -210,46 +231,77 @@
     </div>
   </div>
 
-  <!-- Controls and Preview Panel (Desktop: Right, Mobile: Below) -->
-  <div class="md:w-1/3 mt-4 md:mt-0 md:p-4 flex flex-col items-center">
+  <p class=" text-white">Controls:</p>
+  <div
+    class="w-full p-2 md:w-1/3 mt-4 md:mt-0 md:p-4 md:h-full flex md:flex-col items-center gap-4"
+  >
     <!-- Controls -->
-    <p class=" text-white">Controls</p>
-    <div class="controls">
-      <button onclick={() => movePlayer("up")} disabled={!canMove("up")}
-        >Up</button
-      >
-      <button onclick={() => movePlayer("down")} disabled={!canMove("down")}
-        >Down</button
-      >
-      <button onclick={() => movePlayer("left")} disabled={!canMove("left")}
-        >Left</button
-      >
-      <button onclick={() => movePlayer("right")} disabled={!canMove("right")}
-        >Right</button
-      >
-    </div>
+    <div class="flex flex-col items-center">
+      <div class="controls grid grid-cols-3 gap-2 w-32">
+        <div></div>
+        <button
+          class="bg-gray-700 text-white py-2 px-4 rounded"
+          onclick={() => movePlayer("up")}
+          disabled={!canMove("up")}
+        >
+          Up
+        </button>
+        <div></div>
 
-    <p class=" text-white">Harvest</p>
-    {#each availableItems as item, index}
-      <button
-        class="bg-blue-500 text-white py-2 px-4 rounded m-2"
-        onclick={() => {
-          selectedItem = item;
-          showModal = true;
-        }}
-      >
-        {item?.title}
-      </button>
-      <p class="text-white hidden md:flex">
-        {`(${harvestingControlsList[index]})`}
-      </p>
-    {/each}
+        <button
+          class="bg-gray-700 text-white py-2 px-4 rounded"
+          onclick={() => movePlayer("left")}
+          disabled={!canMove("left")}
+        >
+          Left
+        </button>
+        <div></div>
+        <button
+          class="bg-gray-700 text-white py-2 px-4 rounded"
+          onclick={() => movePlayer("right")}
+          disabled={!canMove("right")}
+        >
+          Right
+        </button>
+
+        <div></div>
+        <button
+          class="bg-gray-700 text-white py-2 px-4 rounded"
+          onclick={() => movePlayer("down")}
+          disabled={!canMove("down")}
+        >
+          Down
+        </button>
+        <div></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center flex-1/2">
+      {#each availableItems as item, index}
+        <p class=" text-white">Harvest</p>
+        <button
+          class="bg-blue-500 text-white py-2 px-4 rounded m-2"
+          onclick={() => {
+            selectedItem = item;
+            showModal = true;
+          }}
+        >
+          {item?.title}
+        </button>
+        <p class="text-white hidden md:flex">
+          {`(${harvestingControlsList[index]})`}
+        </p>
+      {/each}
+    </div>
   </div>
 </div>
 
 <DigitalGardenModal bind:showModal {...selectedItem}
   ><div></div></DigitalGardenModal
 >
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, user-scalable=no"
+/>
 
 <svelte:window on:keydown|preventDefault={onKeyDown} />
 
@@ -268,7 +320,7 @@
     position: relative;
   }
   .yellow {
-    background-image: url("/images/pathBackground.avif");
+    background-image: url("/images/pathBackground.jpg");
     background-size: cover;
     background-position: center;
   }
@@ -280,7 +332,6 @@
   }
   .controls {
     margin-top: 8px;
-    display: flex;
     gap: 10px;
     margin-bottom: 40px;
   }

@@ -354,4 +354,7 @@
     margin: auto;
     margin-top: 20px;
   }
+  * {
+    touch-action: manipulation;
+  }
 </style>

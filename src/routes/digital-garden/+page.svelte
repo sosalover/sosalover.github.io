@@ -298,10 +298,6 @@
 <DigitalGardenModal bind:showModal {...selectedItem}
   ><div></div></DigitalGardenModal
 >
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, user-scalable=no"
-/>
 
 <svelte:window on:keydown|preventDefault={onKeyDown} />
 

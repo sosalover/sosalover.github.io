@@ -16,7 +16,7 @@
   <!-- HEADER -->
   <nav class="h-16 sticky top-0 bg-black p-4 shadow-md z-10 flex-shrink-0">
     <div class="flex justify-between items-center h-full">
-      <a href="/" class="text-white text-lg font-semibold">Thomas Moh</a>
+      <a href="/" class="text-white text-lg font-semibold">THOMAS MOH</a>
 
       <div class="flex items-center space-x-4">
         <a
@@ -55,8 +55,6 @@
 
   <!-- FOOTER -->
   <footer class="h-12 bg-black text-white text-center p-3 flex-shrink-0">
-    <span class="text-sm"
-      >Created By Thomas Moh using Svelte, Tailwind, Vite, Vercel</span
-    >
+    <span class="text-sm">CREATED BY THOMAS MOH</span>
   </footer>
 </main>

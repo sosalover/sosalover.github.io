@@ -31,12 +31,15 @@
         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
       />
 
-      <!-- Bright rectangle behind text -->
-      <div
-        class="absolute top-1/2 -translate-y-1/2 px-4 py-2 bg-black z-10 shadow-black"
-      >
-        <span class="text-white text-lg md:text-3xl font-bold">{tile.text}</span
-        >
+      <div class="absolute top-1/2 -translate-y-1/2 px-4 py-2 z-10">
+        <!-- Right-side-skewed background -->
+        <div
+          class="absolute inset-0 bg-black/80 backdrop-blur-sm shadow-lg z-[-1] clip-right-angle"
+        ></div>
+
+        <span class="text-white text-lg md:text-3xl font-bold relative z-10">
+          {tile.text}
+        </span>
       </div>
 
       <!-- Optional overlay -->
@@ -48,13 +51,27 @@
 
   <!-- 👇 Centered content in middle of all tiles -->
   <div
-    class="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-20"
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none"
   >
-    <h1 class="text-4xl md:text-6xl font-bold text-white drop-shadow">
-      Thomas Moh
-    </h1>
-    <p class="text-lg md:text-xl text-white mt-2 drop-shadow">
-      Creative Technologist. Svelte enjoyer. Design-driven developer.
-    </p>
+    <!-- Skewed background -->
+    <div
+      class="md:-skew-x-12 bg-black backdrop-blur-sm px-2 md:px-6 py-4 shadow-lg"
+    >
+      <!-- Unskew the content inside -->
+      <div class="md:skew-x-12 text-center">
+        <h1 class="text-4xl md:text-6xl font-bold text-white drop-shadow">
+          THOMAS MOH
+        </h1>
+        <p class="text-lg md:text-xl text-white mt-2 drop-shadow">
+          Developer, creator, and writer.
+        </p>
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+  .clip-right-angle {
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+  }
+</style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import DigitalGardenModal from "../../components/DigitalGardenModal.svelte";
+  import DigitalGardenModal from "../../../components/DigitalGardenModal.svelte";
   type Item = {
     title: string;
     image: string;

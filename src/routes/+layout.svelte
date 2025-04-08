@@ -14,7 +14,9 @@
 
 <main class="flex flex-col h-screen">
   <!-- HEADER -->
-  <nav class="h-16 sticky top-0 bg-black p-4 shadow-md z-10 flex-shrink-0">
+  <nav
+    class="h-16 fixed w-full top-0 bg-black p-4 shadow-md z-10 flex-shrink-0"
+  >
     <div class="flex justify-between items-center h-full">
       <a href="/" class="text-white text-lg font-semibold">THOMAS MOH</a>
 

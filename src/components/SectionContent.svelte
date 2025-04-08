@@ -10,10 +10,16 @@
   export let reverse = false;
 </script>
 
-<div class="grid md:grid-cols-2 gap-8 items-center md:py-2">
+<div
+  class="flex flex-col md:flex-row gap-8 md:gap-24 items-center md:py-2 {reverse
+    ? 'md:flex-row-reverse'
+    : ''}"
+>
   <!-- Left: Text content (1/3 width on md+) -->
-  <div class="md:col-span-1 space-y-6 md:px-10">
-    <h3 class="hidden md:flex text-2xl md:text-3xl font-bold">
+  <div class="w-full md:max-w-2/5 space-y-6 md:px-10 justify-center">
+    <h3
+      class="hidden md:flex text-2xl md:text-3xl font-bold bg-black clip-right-angle text-white py-2 px-2 pr-30 w-fit"
+    >
       {title}
     </h3>
     <p class="text-gray-700 text-lg">{description}</p>
@@ -21,7 +27,7 @@
     {#if ctaText}
       <a
         href={ctaHref}
-        class="clip-right-angle inline-block px-4 py-2 bg-red-400 text-white hover:bg-red-800 transition"
+        class="hover:scale-110 transitionunderline clip-right-angle inline-block px-4 py-2 bg-red-400 text-white transition"
       >
         {ctaText}
       </a>
@@ -55,13 +61,13 @@
   </div>
 
   <!-- Right: Image (2/3 width on md+, centered) -->
-  <div class="md:col-span-1 flex justify-center px-4 md:px-0">
+  <a href={ctaHref} class=" flex justify-center px-4 md:px-0">
     <img
       src={imageSrc}
       alt={imageAlt}
-      class="w-full max-w-2xl rounded-md shadow-md object-contain"
+      class="w-full max-w-2xl rounded-md shadow-md object-contain hover:scale-105 transition"
     />
-  </div>
+  </a>
 </div>
 
 <style>

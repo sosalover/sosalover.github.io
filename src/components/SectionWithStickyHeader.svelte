@@ -23,7 +23,7 @@
   </div>
 
   <!-- Section content -->
-  <div class="px-4 py-2 md:py-6 md:flex md:justify-center">
+  <div class="px-4 py-2 md:py-20 md:flex md:justify-center">
     <slot />
   </div>
 </section>

@@ -4,7 +4,7 @@
 </script>
 
 <section
-  class="text-black px-4 text-center md:text-left h-screen flex items-center relative"
+  class="text-black py-16 px-4 text-center md:text-left h-screen flex items-center relative"
 >
   <div
     class="max-w-7xl mx-auto flex gap-8 flex-col-reverse md:flex-row items-center"
@@ -50,7 +50,7 @@
 <SectionWithStickyHeader title={"ALL BLUES NYC"}>
   <SectionContent
     title="All Blues NYC"
-    description="Complicated policies communicated creatively for a record bar in NYC."
+    description="Creatively communicated complex policies for a record bar in NYC. (2025)"
     ctaText="All Blues NYC"
     ctaHref="https://www.allbluesnyc.com"
     bullets={[
@@ -67,7 +67,7 @@
 <SectionWithStickyHeader title={"DIGITAL GARDEN"}>
   <SectionContent
     title="Digital Garden"
-    description="Gameified internet scrapbooking. "
+    description="Gameified internet scrapbooking. (2025)"
     ctaText="My Digital Garden"
     ctaHref="/digital-creations/digital-garden"
     bullets={[
@@ -78,6 +78,23 @@
     skills={["SvelteKit", "Tailwind CSS", "Vite", "Vercel"]}
     imageSrc="/images/portfolio-images/digital-garden.png"
     imageAlt="Screenshot of digital garden"
+  ></SectionContent>
+</SectionWithStickyHeader>
+<SectionWithStickyHeader title={"BURRITO CV"}>
+  <SectionContent
+    title="Burrito CV"
+    description="Learn about my experience with a game. (2023)"
+    ctaText="Play Game"
+    ctaHref="https://sosalover.github.io/BurritoCV/"
+    bullets={[
+      "Generate my CV by selecting items off a Chipotle-style counter.",
+      "Mouse and keyboard support",
+      "Created responsive Svelte modal",
+    ]}
+    skills={["Unity", "C#", "WebGL"]}
+    imageSrc="/images/portfolio-images/burrito-cv.png"
+    imageAlt="Screenshot of burrito project"
+    reverse={true}
   ></SectionContent>
 </SectionWithStickyHeader>
 

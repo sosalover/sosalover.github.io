@@ -2,7 +2,6 @@
   let { children } = $props();
   import "../app.css";
   import GithubSvg from "../svgs/GithubSVG.svelte";
-  import HamburgerSvg from "../svgs/HamburgerSVG.svelte";
   import LinkedinSvg from "../svgs/LinkedinSVG.svelte";
 
   let mobileMenuOpen = $state(false);
@@ -35,11 +34,6 @@
         >
           <GithubSvg />
         </a>
-        <div class="md:hidden flex items-center">
-          <button class="text-white" onclick={toggleMenu}>
-            <HamburgerSvg />
-          </button>
-        </div>
       </div>
     </div>
 
@@ -57,6 +51,6 @@
 
   <!-- FOOTER -->
   <footer class="h-12 bg-black text-white text-center p-3 flex-shrink-0">
-    <span class="text-sm">CREATED BY THOMAS MOH</span>
+    <span class="text-sm">CREATED BY THOMAS MOH, thomasmoh314@gmail.com</span>
   </footer>
 </main>

@@ -2,12 +2,13 @@
   export let title = "";
   export let description = "";
   export let ctaText = "";
-  export let ctaHref = "#";
+  export let ctaHref: string | null = null;
   export let bullets: string[] = [];
   export let skills: string[] = [];
   export let imageSrc = "";
   export let imageAlt = "";
   export let reverse = false;
+  export let video: string | null = null;
 </script>
 
 <div
@@ -61,12 +62,26 @@
   </div>
 
   <!-- Right: Image (2/3 width on md+, centered) -->
-  <a href={ctaHref} class=" flex justify-center px-4 md:px-0">
-    <img
-      src={imageSrc}
-      alt={imageAlt}
-      class="w-full max-w-2xl rounded-md shadow-md object-contain hover:scale-105 transition"
-    />
+  <a href={ctaHref} class=" w-full flex justify-center px-4 md:px-0">
+    {#if video}
+      <video
+        class="w-2/3 h-2/3 rounded-md object-contain"
+        src={video}
+        autoplay
+        loop
+        muted
+        playsinline
+      ></video>
+    {/if}
+    {#if !video}
+      <img
+        src={imageSrc}
+        alt={imageAlt}
+        class="w-full max-w-2xl rounded-md {!!ctaHref
+          ? 'shadow-md'
+          : ''} object-contain {!!ctaHref ? 'hover:scale-105' : ''} transition"
+      />
+    {/if}
   </a>
 </div>
 

@@ -5,66 +5,65 @@
   import LinkedInSvgLarge from "../../svgs/LinkedInSVGLarge.svelte";
 </script>
 
-<!-- HTML Markup -->
-<section
-  class=" top-24 md:top-0 text-black px-4 text-center md:text-left h-screen flex items-center relative pb-32 md:pb-0"
->
+<section class="min-h-screen flex items-center py-16 px-4 bg-white text-black">
   <div
-    class="max-w-7xl mx-auto flex gap-8 flex-col-reverse md:flex-row items-center"
+    class="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-4 md:gap-12"
   >
-    <div class="md:w-1/2">
+    <!-- Image -->
+    <div class="pt-4 md:pt-0 w-3/4 md:w-1/2">
+      <img
+        src="/images/experience/serving.jpeg"
+        alt="Thomas Working"
+        class="w-full rounded-lg shadow-lg object-cover aspect-square"
+      />
+    </div>
+
+    <!-- Text Content -->
+    <div class="w-full md:w-1/2 text-center md:text-left">
       <h1
-        class="clip-right-angle text-white text-4xl font-extrabold mb-4 pr-30 bg-black p-2 w-fit"
+        class="clip-right-angle text-4xl font-extrabold text-white bg-black inline-block px-4 py-2 mb-4 md:pr-20"
       >
         Thomas Moh
       </h1>
-      <p class="text-lg mb-6">
+      <p class="text-lg mb-4">
         I am a Software Engineer interested in frontend architecture, system
-        design, and human computer interaction.
+        design, and human-computer interaction.
       </p>
-      <p class="text-lg mb-6">
+      <p class="text-lg mb-4">
         I graduated from Northwestern University with a degree in Computer
         Science.
       </p>
       <p class="text-lg mb-6">
-        I have worked as a frontend engineer, a UX designer, a data engineer, a
-        tennis instructor, and at one restaurant in Flåm, a server.
+        I've worked as a frontend engineer, UX designer, data engineer, tennis
+        instructor, and a restaurant server in Flåm.
       </p>
-      <div class="flex gap-8 align-center">
+      <div class="flex justify-center md:justify-start gap-6 items-center">
         <a
           href="/Thomas_Moh_SE_Resume.pdf"
           download="ThomasMoh_Resume"
-          class="hover:scale-110 transition underline clip-right-angle inline-block px-2 py-2 pr-6 bg-red-400 text-white transition text-xl"
+          class="bg-red-400 text-white px-4 py-2 text-lg font-semibold hover:scale-105 transition-transform clip-right-angle"
         >
           My Resume
         </a>
         <a
           href="https://www.linkedin.com/in/thomas-moh-39ab27196/"
-          class="text-white text-2xl"
+          class="text-2xl text-blue-600 hover:scale-110 transition-transform"
           target="_blank"
         >
           <LinkedInSvgLarge />
         </a>
         <a
           href="https://github.com/tmoh-figs"
-          class="text-white text-2xl"
+          class="text-2xl text-black hover:scale-110 transition-transform"
           target="_blank"
         >
           <GithubSvgDark />
         </a>
       </div>
     </div>
-    <div class="md:w-1/2 mt-8 md:mt-0">
-      <img
-        src="/images/experience/serving.jpeg"
-        alt="Thomas Working"
-        class="w-full h-auto rounded-lg shadow-lg object-cover aspect-square"
-      />
-    </div>
   </div>
-
-  <!-- Bouncing down arrow -->
 </section>
+
 <div
   class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
 >
@@ -154,7 +153,7 @@
     <p class="text-lg text-white mb-6">Please do!</p>
     <a
       href="mailto:thomasmoh314@gmail.com"
-      class="bg-red-400 text-white py-2 px-6 rounded hover:bg-blue-600"
+      class="bg-red-400 text-white py-2 px-6 skew-x-8 hover:bg-red-600"
       >Email Me</a
     >
   </div>

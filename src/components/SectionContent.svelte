@@ -12,14 +12,14 @@
 </script>
 
 <div
-  class="flex flex-col md:flex-row gap-8 md:gap-24 items-center md:py-2 {reverse
+  class="flex flex-col md:flex-row gap-8 md:gap-24 items-center md:py-2 py-6 {reverse
     ? 'md:flex-row-reverse'
     : ''}"
 >
   <!-- Left: Text content (1/3 width on md+) -->
   <div class="w-full md:max-w-2/5 space-y-6 md:px-10 justify-center">
     <h3
-      class="hidden md:flex text-2xl md:text-3xl font-bold bg-black clip-right-angle text-white py-2 px-2 pr-30 w-fit"
+      class="text-2xl md:text-3xl font-bold md:bg-black clip-right-angle md:text-white py-2 md:pl-2 md:pr-8 w-fit"
     >
       {title}
     </h3>

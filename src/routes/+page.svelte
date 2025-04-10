@@ -3,7 +3,7 @@
   const tiles = [
     {
       href: "/experience",
-      image: "/images/experiences.jpg",
+      image: "/images/skyline.jpg",
       text: "Experience",
     },
     { href: "/writing", image: "/images/donquixote.avif", text: "Writing" },
@@ -21,7 +21,7 @@
   ];
 </script>
 
-<div class="relative h-full w-full grid grid-cols-2 grid-rows-2">
+<div class="relative h-full w-full grid grid-cols-2 grid-rows-2 gap-4 bg-black">
   {#each tiles as tile, i}
     <a href={tile.href} class="group relative overflow-hidden flex i">
       <!-- Background image -->

@@ -37,6 +37,7 @@
     z-index: 50;
     min-height: 50%;
     max-height: 50%;
+    margin: auto;
   }
 
   dialog::backdrop {

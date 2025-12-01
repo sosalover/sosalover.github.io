@@ -34,12 +34,11 @@
         Science.
       </p>
       <p class="text-lg mb-6">
-        I've worked as a frontend engineer, UX designer, data engineer, tennis
-        instructor, and a restaurant server in Flåm.
+        I've worked as a frontend engineer, UX designer, and a data engineer.
       </p>
       <div class="flex justify-center md:justify-start gap-6 items-center">
         <a
-          href="/Thomas_Moh_SE_Resume.pdf"
+          href="/ThomasMohResume.pdf"
           download="ThomasMoh_Resume"
           class="bg-red-400 text-white px-4 py-2 text-lg font-semibold hover:scale-105 transition-transform clip-right-angle"
         >

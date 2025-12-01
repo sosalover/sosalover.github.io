@@ -1,5 +1,8 @@
 <script>
   import Modal from "../../components/Modal.svelte";
+  import SectionContent from "../../components/SectionContent.svelte";
+  import SectionWithStickyHeader from "../../components/SectionWithStickyHeader.svelte";
+
   let showModal = false;
   let codeInput = "";
   let codeCorrect = false;
@@ -25,24 +28,39 @@
 </script>
 
 <div
-  class="relative top-16 w-full flex flex-col justify-center items-center text-3xl p-4 bg-white gap-8"
+  class="relative top-16 w-full flex flex-col justify-center items-center text-3xl p-4 bg-white gap-8 pt-0"
 >
-  <section class="p-4 md:p-12">
+  <SectionWithStickyHeader title={"Writing"}>
+  <div class="flex-col gap-4 flex">
     <p class="text-black">
-      I have been writing for what feels like a long time now. Reach out to me
+      Writing is my favorite thing to do. Reach out to me
       if you want to discuss something with me.
     </p>
-  </section>
-  <section class="flex flex-col md:flex-row gap-4 items-center justify-center">
     <p class="text-black">Here to beta read my novel?</p>
 
     <button
       on:click={openModal}
-      class="hover:scale-110 transition underline clip-right-angle inline-block px-4 py-2 bg-red-400 text-white"
+      class="hover:scale-110 transition underline clip-right-angle inline-block px-4 py-2 bg-red-400 text-white max-w-100"
     >
       READ NOW
     </button>
-  </section>
+    </div>
+  </SectionWithStickyHeader>
+  
+
+  <SectionWithStickyHeader title={'The Works of Steve Roper'}>
+    <SectionContent
+    title="The Works of Steve Roper"
+    description="I wrote a small book to celebrate the works of Steve Roper."
+    ctaText="PDF of book"
+    ctaHref="/steve-book.pdf"
+    imageSrc="/images/writing/steve-book.png"
+    imageAlt="Screenshot of Steve Book"
+    reverse={false}
+  ></SectionContent>
+  </SectionWithStickyHeader>
+
+ 
 </div>
 
 {#if showModal}

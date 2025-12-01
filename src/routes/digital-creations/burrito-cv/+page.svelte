@@ -81,7 +81,7 @@
   </div>
 
   <div id="unity-footer">
-    <a href="/Thomas_Moh_SE_Resume.pdf" download="ThomasMoh_Resume">
+    <a href="/ThomasMohResume.pdf" download="ThomasMoh_Resume">
       <button class="button">Download My Resume</button>
     </a>
     <button class="button" on:click={restartGame}>Restart Game</button>

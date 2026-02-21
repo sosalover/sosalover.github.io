@@ -191,40 +191,59 @@
   <!-- Header -->
   <header class="text-center p-4 bg-gray-800 text-white">
     <h1 class="text-3xl">Digital Garden</h1>
+    <p class="sr-only">
+      Use arrow keys to move the player around the grid. Press Space, 1, 2, or 3 to harvest nearby items.
+    </p>
   </header>
 
   <!-- Main Content Section (Grid and Preview Panel) -->
   <div class="flex-1 p-4">
     <div class="grid-container">
-      <div class="grid grid-cols-16 grid-rows-16">
+      <div class="grid grid-cols-16 grid-rows-16" role="grid" aria-label="Digital garden grid - use arrow keys to move">
         {#each Array(gridSize) as _, rowIndex}
           {#each Array(gridSize) as _, colIndex}
-            <div
-              class="cell h-full"
-              class:backgroundCell={legalPath[rowIndex][colIndex] === 0 &&
-                items[rowIndex][colIndex] === null}
-              class:yellow={legalPath[rowIndex][colIndex] === 1}
-              style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};"
-            >
-              {#if playerPosition.x === colIndex && playerPosition.y === rowIndex}
-                <img
-                  src={playerSprite}
-                  alt="Player"
-                  class="w-full h-full object-contain absolute player"
-                />
-              {/if}
-              {#if items[rowIndex][colIndex] !== null}
-                <div
-                  class="backgroundCell h-full w-full flex items-center justify-center"
-                >
+            {#if items[rowIndex][colIndex] !== null || (playerPosition.x === colIndex && playerPosition.y === rowIndex)}
+              <div
+                class="cell h-full"
+                class:backgroundCell={legalPath[rowIndex][colIndex] === 0 &&
+                  items[rowIndex][colIndex] === null}
+                class:yellow={legalPath[rowIndex][colIndex] === 1}
+                style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};"
+                role="gridcell"
+                aria-label={playerPosition.x === colIndex && playerPosition.y === rowIndex
+                  ? `Player position (row ${rowIndex + 1}, column ${colIndex + 1})`
+                  : items[rowIndex][colIndex]
+                    ? `${items[rowIndex][colIndex].title} at row ${rowIndex + 1}, column ${colIndex + 1}`
+                    : undefined}
+              >
+                {#if playerPosition.x === colIndex && playerPosition.y === rowIndex}
                   <img
-                    src={`/images/digital-garden-icons/${items[rowIndex][colIndex].icon}.png`}
-                    class="w-3/4 h-3/4 md:w-1/2 md:h-1/2 object-cover absolute"
-                    alt={items[rowIndex][colIndex]?.icon}
+                    src={playerSprite}
+                    alt="Player"
+                    class="w-full h-full object-contain absolute player"
                   />
-                </div>
-              {/if}
-            </div>
+                {/if}
+                {#if items[rowIndex][colIndex] !== null}
+                  <div
+                    class="backgroundCell h-full w-full flex items-center justify-center"
+                  >
+                    <img
+                      src={`/images/digital-garden-icons/${items[rowIndex][colIndex].icon}.png`}
+                      class="w-3/4 h-3/4 md:w-1/2 md:h-1/2 object-cover absolute"
+                      alt={items[rowIndex][colIndex]?.title}
+                    />
+                  </div>
+                {/if}
+              </div>
+            {:else}
+              <div
+                class="cell h-full"
+                class:backgroundCell={legalPath[rowIndex][colIndex] === 0}
+                class:yellow={legalPath[rowIndex][colIndex] === 1}
+                style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};"
+                aria-hidden="true"
+              ></div>
+            {/if}
           {/each}
         {/each}
       </div>
@@ -240,35 +259,39 @@
       <div class="controls grid grid-cols-3 gap-2 w-32">
         <div></div>
         <button
-          class="bg-gray-700 text-white py-2 px-4 rounded"
+          class="bg-gray-700 text-white py-2 px-4 rounded focus-visible:ring-2 focus-visible:ring-white"
           onclick={() => movePlayer("up")}
           disabled={!canMove("up")}
+          aria-label="Move up"
         >
           Up
         </button>
         <div></div>
 
         <button
-          class="bg-gray-700 text-white py-2 px-4 rounded"
+          class="bg-gray-700 text-white py-2 px-4 rounded focus-visible:ring-2 focus-visible:ring-white"
           onclick={() => movePlayer("left")}
           disabled={!canMove("left")}
+          aria-label="Move left"
         >
           Left
         </button>
         <div></div>
         <button
-          class="bg-gray-700 text-white py-2 px-4 rounded"
+          class="bg-gray-700 text-white py-2 px-4 rounded focus-visible:ring-2 focus-visible:ring-white"
           onclick={() => movePlayer("right")}
           disabled={!canMove("right")}
+          aria-label="Move right"
         >
           Right
         </button>
 
         <div></div>
         <button
-          class="bg-gray-700 text-white py-2 px-4 rounded"
+          class="bg-gray-700 text-white py-2 px-4 rounded focus-visible:ring-2 focus-visible:ring-white"
           onclick={() => movePlayer("down")}
           disabled={!canMove("down")}
+          aria-label="Move down"
         >
           Down
         </button>
@@ -279,11 +302,12 @@
       {#each availableItems as item, index}
         <p class=" text-white">Harvest</p>
         <button
-          class="bg-blue-500 text-white py-2 px-4 rounded m-2"
+          class="bg-blue-500 text-white py-2 px-4 rounded m-2 focus-visible:ring-2 focus-visible:ring-white"
           onclick={() => {
             selectedItem = item;
             showModal = true;
           }}
+          aria-label="Harvest {item?.title}"
         >
           {item?.title}
         </button>

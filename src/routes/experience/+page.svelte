@@ -3,6 +3,8 @@
   import SectionWithStickyHeader from "../../components/SectionWithStickyHeader.svelte";
   import GithubSvgDark from "../../svgs/GithubSVGDark.svelte";
   import LinkedInSvgLarge from "../../svgs/LinkedInSVGLarge.svelte";
+  import BouncingArrow from "../../components/BouncingArrow.svelte";
+  import ContactSection from "../../components/ContactSection.svelte";
 </script>
 
 <section class="min-h-screen flex items-center py-16 px-4 bg-white text-black">
@@ -38,7 +40,7 @@
       </p>
       <div class="flex justify-center md:justify-start gap-6 items-center">
         <a
-          href="/ThomasMohResume.pdf"
+          href="/Thomas_Moh_SE_Resume.pdf"
           download="ThomasMoh_Resume"
           class="bg-red-400 text-white px-4 py-2 text-lg font-semibold hover:scale-105 transition-transform clip-right-angle"
         >
@@ -63,21 +65,7 @@
   </div>
 </section>
 
-<div
-  class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
->
-  <svg
-    class="w-6 h-6 text-black"
-    fill="none"
-    stroke="black"
-    stroke-width="2"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"
-    ></path>
-  </svg>
-</div>
+<BouncingArrow />
 
 <SectionWithStickyHeader title="FIGS">
   <SectionContent
@@ -125,8 +113,8 @@
     skills={["LookerML", "HTML", "SQL"]}
     imageSrc="/images/experience/cured.png"
     imageAlt="Cured logo"
-    ctaHref="https://wearfigs.com"
-    ctaText="Visit FIGS site"
+    ctaHref="https://www.cured.health/"
+    ctaText="Visit Cured site"
     reverse={true}
   ></SectionContent>
 </SectionWithStickyHeader>
@@ -145,21 +133,4 @@
   ></SectionContent>
 </SectionWithStickyHeader>
 
-<!-- Contact Section -->
-<section id="contact" class="py-16 text-center bg-black">
-  <div class="container mx-auto">
-    <h2 class="text-3xl font-semibold text-white mb-5">Contact Me</h2>
-    <p class="text-lg text-white mb-6">Please do!</p>
-    <a
-      href="mailto:thomasmoh314@gmail.com"
-      class="bg-red-400 text-white py-2 px-6 skew-x-8 hover:bg-red-600"
-      >Email Me</a
-    >
-  </div>
-</section>
-
-<style>
-  .clip-right-angle {
-    clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
-  }
-</style>
+<ContactSection />

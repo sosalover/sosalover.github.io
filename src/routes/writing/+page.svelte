@@ -97,9 +97,3 @@
     </form>
   </Modal>
 {/if}
-
-<style>
-  .clip-right-angle {
-    clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
-  }
-</style>

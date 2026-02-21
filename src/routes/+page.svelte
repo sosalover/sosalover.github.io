@@ -23,7 +23,7 @@
 
 <div class="relative h-full w-full grid grid-cols-2 grid-rows-2 gap-4 bg-black">
   {#each tiles as tile, i}
-    <a href={tile.href} class="group relative overflow-hidden flex i">
+    <a href={tile.href} class="group relative overflow-hidden flex focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:z-10">
       <!-- Background image -->
       <img
         src={tile.image}
@@ -69,9 +69,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  .clip-right-angle {
-    clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
-  }
-</style>

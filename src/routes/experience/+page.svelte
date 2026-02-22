@@ -4,8 +4,11 @@
   import GithubSvgDark from "../../svgs/GithubSVGDark.svelte";
   import LinkedInSvgLarge from "../../svgs/LinkedInSVGLarge.svelte";
   import BouncingArrow from "../../components/BouncingArrow.svelte";
-  import ContactSection from "../../components/ContactSection.svelte";
 </script>
+
+<svelte:head>
+	<title>Experience — Thomas Moh</title>
+</svelte:head>
 
 <section class="min-h-screen flex items-center py-16 px-4 bg-white text-black">
   <div
@@ -132,5 +135,3 @@
     imageAlt="Amazon Logo"
   ></SectionContent>
 </SectionWithStickyHeader>
-
-<ContactSection />

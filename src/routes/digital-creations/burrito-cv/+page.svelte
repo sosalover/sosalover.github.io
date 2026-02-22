@@ -62,7 +62,7 @@
 </script>
 
 <svelte:head>
-  <title>Burrito CV</title>
+  <title>Burrito CV — Thomas Moh</title>
 </svelte:head>
 
 <div bind:this={container} id="unity-container" class="unity-desktop">

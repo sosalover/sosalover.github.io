@@ -2,8 +2,11 @@
   import SectionGallery from "../../components/SectionGallery.svelte";
   import SectionWithStickyHeader from "../../components/SectionWithStickyHeader.svelte";
   import BouncingArrow from "../../components/BouncingArrow.svelte";
-  import ContactSection from "../../components/ContactSection.svelte";
 </script>
+
+<svelte:head>
+	<title>Physical Creations — Thomas Moh</title>
+</svelte:head>
 
 <section
   class="text-black py-16 px-4 text-center md:text-left h-screen flex items-center relative"
@@ -102,4 +105,3 @@
     ]}
   ></SectionGallery>
 </SectionWithStickyHeader>
-<ContactSection />

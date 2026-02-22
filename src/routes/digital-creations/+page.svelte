@@ -4,6 +4,10 @@
   import BouncingArrow from "../../components/BouncingArrow.svelte";
 </script>
 
+<svelte:head>
+	<title>Digital Creations — Thomas Moh</title>
+</svelte:head>
+
 <section
   class="text-black py-16 px-4 text-center md:text-left h-screen flex items-center relative"
 >

@@ -17,7 +17,7 @@
     : ''}"
 >
   <!-- Left: Text content (1/3 width on md+) -->
-  <div class="w-full md:max-w-2/5 space-y-6 md:px-10 justify-center">
+  <div class="w-full md:w-2/5 space-y-6 md:px-10 justify-center">
     <h3
       class="text-2xl md:text-3xl font-bold md:bg-black clip-right-angle md:text-white py-2 md:pl-2 md:pr-8 w-fit"
     >
@@ -28,7 +28,8 @@
     {#if ctaText}
       <a
         href={ctaHref}
-        class="hover:scale-110 transitionunderline clip-right-angle inline-block px-4 py-2 bg-red-400 text-white transition"
+        class="hover:scale-110 transition underline clip-right-angle inline-block px-4 py-2 bg-red-400 text-white focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2"
+        aria-label="{ctaText} - {title}"
       >
         {ctaText}
       </a>
@@ -62,7 +63,7 @@
   </div>
 
   <!-- Right: Image (2/3 width on md+, centered) -->
-  <a href={ctaHref} class=" w-full flex justify-center px-4 md:px-0">
+  <a href={ctaHref} class="w-full flex justify-center px-4 md:px-0 focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 rounded-md" aria-label="View {title}">
     {#if video}
       <video
         class="w-2/3 h-2/3 rounded-md object-contain"
@@ -84,9 +85,3 @@
     {/if}
   </a>
 </div>
-
-<style>
-  .clip-right-angle {
-    clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
-  }
-</style>

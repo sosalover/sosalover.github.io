@@ -1,4 +1,11 @@
 @import "tailwindcss";
+
+@layer utilities {
+  .clip-right-angle {
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+  }
+}
+
 body {
     font-family: "Syne", sans-serif;
     font-optical-sizing: auto;

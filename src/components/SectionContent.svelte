@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { reveal } from '$lib/reveal';
   export let title = "";
   export let description = "";
   export let ctaText = "";
@@ -12,12 +13,13 @@
 </script>
 
 <div
+  use:reveal
   class="flex flex-col md:flex-row gap-8 md:gap-24 items-center md:py-2 py-6 {reverse
     ? 'md:flex-row-reverse'
     : ''}"
 >
   <!-- Left: Text content (1/3 width on md+) -->
-  <div class="w-full md:w-2/5 space-y-6 md:px-10 justify-center">
+  <div class="w-full md:w-2/5 space-y-6 md:px-10 justify-center border-l-4 border-red-400 pl-4">
     <h3
       class="text-2xl md:text-3xl font-bold md:bg-black clip-right-angle md:text-white py-2 md:pl-2 md:pr-8 w-fit"
     >
@@ -28,7 +30,7 @@
     {#if ctaText}
       <a
         href={ctaHref}
-        class="hover:scale-110 transition underline clip-right-angle inline-block px-4 py-2 bg-red-400 text-white focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2"
+        class="hover:scale-110 transition underline clip-right-angle inline-block px-4 py-2 bg-red-400 text-white focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 hover:shadow-lg hover:shadow-red-400/30"
         aria-label="{ctaText} - {title}"
       >
         {ctaText}

@@ -4,7 +4,7 @@
 		<p class="text-lg text-white mb-6">Please do!</p>
 		<a
 			href="mailto:thomasmoh314@gmail.com"
-			class="bg-red-400 text-white py-2 px-6 skew-x-8 hover:bg-red-600"
+			class="bg-red-400 text-white py-2 px-6 clip-right-angle hover:bg-red-600"
 			>Email Me</a
 		>
 	</div>

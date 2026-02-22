@@ -7,7 +7,7 @@
 	<div class="sticky top-16 bg-black px-4 py-2 z-10 overflow-hidden max-w-screen">
 		<div class="flex items-center gap-4 whitespace-nowrap">
 			<!-- Main solid title -->
-			<h2 class="text-xl md:text-4xl font-bold text-white shrink-0 underline z-10">
+			<h2 class="text-base md:text-2xl font-bold text-white shrink-0 underline z-10">
 				{title}
 			</h2>
 
@@ -15,12 +15,12 @@
 			<div class="marquee-container overflow-hidden" aria-hidden="true">
 				<div class="marquee-track">
 					{#each Array(20) as _}
-						<span class="text-sm md:text-l font-bold text-red-400 select-none shrink-0 mx-2">
+						<span class="text-base md:text-xl font-bold text-red-400 select-none shrink-0 mx-2">
 							{title}
 						</span>
 					{/each}
 					{#each Array(20) as _}
-						<span class="text-sm md:text-l font-bold text-red-400 select-none shrink-0 mx-2">
+						<span class="text-base md:text-xl font-bold text-red-400 select-none shrink-0 mx-2">
 							{title}
 						</span>
 					{/each}
@@ -44,7 +44,13 @@
 	.marquee-track {
 		display: flex;
 		width: max-content;
-		animation: marquee 20s linear infinite;
+		animation: marquee 60s linear infinite;
+	}
+
+	@media (max-width: 768px) {
+		.marquee-track {
+			animation-duration: 90s;
+		}
 	}
 
 	@keyframes marquee {

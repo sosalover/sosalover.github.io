@@ -2,7 +2,6 @@
   import SectionGallery from "../../components/SectionGallery.svelte";
   import SectionWithStickyHeader from "../../components/SectionWithStickyHeader.svelte";
   import BouncingArrow from "../../components/BouncingArrow.svelte";
-  import ContactSection from "../../components/ContactSection.svelte";
 </script>
 
 <svelte:head>
@@ -106,4 +105,3 @@
     ]}
   ></SectionGallery>
 </SectionWithStickyHeader>
-<ContactSection />

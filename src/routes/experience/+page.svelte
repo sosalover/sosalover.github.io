@@ -4,7 +4,6 @@
   import GithubSvgDark from "../../svgs/GithubSVGDark.svelte";
   import LinkedInSvgLarge from "../../svgs/LinkedInSVGLarge.svelte";
   import BouncingArrow from "../../components/BouncingArrow.svelte";
-  import ContactSection from "../../components/ContactSection.svelte";
 </script>
 
 <svelte:head>
@@ -136,5 +135,3 @@
     imageAlt="Amazon Logo"
   ></SectionContent>
 </SectionWithStickyHeader>
-
-<ContactSection />

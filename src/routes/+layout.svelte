@@ -3,12 +3,23 @@
 	import '../app.css';
 	import GithubSvg from '../svgs/GithubSVG.svelte';
 	import LinkedinSvg from '../svgs/LinkedinSVG.svelte';
+	import { onNavigate } from '$app/navigation';
 
 	let mobileMenuOpen = $state(false);
 
 	function toggleMenu() {
 		mobileMenuOpen = !mobileMenuOpen;
 	}
+
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 </script>
 
 <svelte:head>
@@ -28,7 +39,7 @@
 	Skip to content
 </a>
 
-<main class="flex flex-col h-screen">
+<main class="flex flex-col min-h-screen">
 	<!-- HEADER -->
 	<nav
 		class="h-16 fixed w-full top-0 bg-black p-4 shadow-md z-10 flex-shrink-0"
@@ -96,7 +107,32 @@
 	</div>
 
 	<!-- FOOTER -->
-	<footer class="h-12 bg-black text-white text-center p-3 flex-shrink-0">
-		<span class="text-sm">CREATED BY THOMAS MOH, thomasmoh314@gmail.com</span>
+	<footer class="bg-black text-white py-12 px-8 flex-shrink-0">
+		<div class="max-w-4xl mx-auto">
+			<div class="clip-right-angle bg-red-400 inline-block px-4 py-1 mb-6">
+				<span class="text-black font-extrabold text-sm tracking-widest">GET IN TOUCH</span>
+			</div>
+			<h2 class="text-3xl md:text-5xl font-extrabold tracking-widest mb-4">LET'S WORK TOGETHER</h2>
+			<p class="text-xl md:text-2xl text-red-400 font-semibold mb-8">thomasmoh314@gmail.com</p>
+			<div class="flex gap-6 mb-10">
+				<a
+					href="https://www.linkedin.com/in/thomas-moh-39ab27196/"
+					class="text-white hover:text-red-400 transition-colors focus-visible:ring-2 focus-visible:ring-white rounded"
+					target="_blank"
+					aria-label="LinkedIn profile"
+				>
+					<LinkedinSvg />
+				</a>
+				<a
+					href="https://github.com/tmoh-figs"
+					class="text-white hover:text-red-400 transition-colors focus-visible:ring-2 focus-visible:ring-white rounded"
+					target="_blank"
+					aria-label="GitHub profile"
+				>
+					<GithubSvg />
+				</a>
+			</div>
+			<p class="text-gray-500 text-sm tracking-widest">THOMAS MOH © 2026</p>
+		</div>
 	</footer>
 </main>

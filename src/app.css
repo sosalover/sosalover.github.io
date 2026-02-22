@@ -12,3 +12,9 @@ body {
     font-weight: 400;
     font-style: normal;
   }
+
+/* Page transitions */
+@keyframes fade-in { from { opacity: 0; transform: translateY(8px); } }
+@keyframes fade-out { to { opacity: 0; transform: translateY(-8px); } }
+::view-transition-old(root) { animation: 180ms ease-in both fade-out; }
+::view-transition-new(root) { animation: 220ms ease-out both fade-in; }

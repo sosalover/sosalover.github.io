@@ -7,6 +7,10 @@
   import ContactSection from "../../components/ContactSection.svelte";
 </script>
 
+<svelte:head>
+	<title>Experience — Thomas Moh</title>
+</svelte:head>
+
 <section class="min-h-screen flex items-center py-16 px-4 bg-white text-black">
   <div
     class="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-4 md:gap-12"

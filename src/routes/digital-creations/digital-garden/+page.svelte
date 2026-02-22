@@ -158,6 +158,7 @@
 </script>
 
 <svelte:head>
+  <title>Digital Garden — Thomas Moh</title>
   <link
     rel="preload"
     as="image"

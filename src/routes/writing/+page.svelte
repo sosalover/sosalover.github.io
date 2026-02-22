@@ -27,6 +27,10 @@
   }
 </script>
 
+<svelte:head>
+	<title>Writing — Thomas Moh</title>
+</svelte:head>
+
 <div
   class="relative top-16 w-full flex flex-col justify-center items-center text-3xl p-4 bg-white gap-8 pt-0"
 >

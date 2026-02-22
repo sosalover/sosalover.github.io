@@ -42,7 +42,7 @@
   <!-- Centered nameplate -->
   <div
     in:scale={mounted ? { duration: 350, delay: 700, start: 0.92 } : { duration: 0 }}
-    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none"
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-auto"
   >
     <div class="md:-skew-x-12 bg-black backdrop-blur-sm px-2 md:px-6 py-4 shadow-lg">
       <div class="nameplate md:skew-x-12 text-center">

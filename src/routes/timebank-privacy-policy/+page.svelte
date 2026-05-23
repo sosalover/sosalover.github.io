@@ -70,10 +70,11 @@
 	<section class="mb-8">
 		<h2 class="text-xl font-bold mb-3 text-red-400">Data Deletion</h2>
 		<p class="text-gray-300 leading-relaxed">
-			You can delete your account at any time by contacting me at
+			You can delete your account and all associated data directly from the Account screen inside
+			the app. You may also request deletion by emailing
 			<a href="mailto:thomasmoh314@gmail.com" class="text-red-400 underline"
 				>thomasmoh314@gmail.com</a
-			>. All associated data will be removed from Supabase within 30 days.
+			>. All associated data will be removed from Supabase within 30 days of deletion.
 		</p>
 	</section>
 

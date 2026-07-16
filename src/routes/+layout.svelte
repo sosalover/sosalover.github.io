@@ -73,6 +73,7 @@
 						class="nav-link font-label"
 						class:is-active={isActive(link.href)}
 						aria-current={isActive(link.href) ? 'page' : undefined}
+						data-sveltekit-reload={link.href === '/writing' ? '' : 'off'}
 					>
 						{link.label}
 					</a>
@@ -123,6 +124,7 @@
 							class="mobile-link font-label"
 							class:is-active={isActive(link.href)}
 							aria-current={isActive(link.href) ? 'page' : undefined}
+							data-sveltekit-reload={link.href === '/writing' ? '' : 'off'}
 							onclick={() => (mobileMenuOpen = false)}
 						>
 							{link.label}

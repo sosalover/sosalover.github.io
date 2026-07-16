@@ -40,6 +40,7 @@
 	{#each tiles as tile, i}
 		<a
 			href={tile.href}
+			data-sveltekit-reload={tile.href === '/writing' ? '' : 'off'}
 			in:fly={mounted ? { y: 20, duration: 400, delay: i * 150 } : { y: 0, duration: 0 }}
 			class="tile group"
 		>

@@ -86,15 +86,17 @@
 		</div>
 	</SectionWithStickyHeader>
 
-	<section class="pull-band">
-		<p class="pull-line">
-			And out of a dream, or a nightmare, I heard her utter:
-			<span class="pull-accent">"Thank you."</span>
-		</p>
-		<p class="pull-byline font-label">— Mockingbirds Talk</p>
-	</section>
-
 	<div class="left-align">
+		<SectionWithStickyHeader title={'Mockingbirds Talk Quotes'}>
+			<div class="quote-block">
+				<p class="quote-line">
+					And out of a dream, or a nightmare, I heard her utter:
+					<span class="quote-accent">"Thank you."</span>
+				</p>
+				<p class="quote-byline font-label">— Mockingbirds Talk</p>
+			</div>
+		</SectionWithStickyHeader>
+
 		<SectionWithStickyHeader title={'The Works of Steve Roper'}>
 			<SectionContent
 				title="The Works of Steve Roper"
@@ -159,6 +161,10 @@
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
+	}
+
+	.left-align :global(.section-body) {
+		justify-content: flex-start;
 	}
 
 	.left-align :global(.entry__text) {
@@ -387,26 +393,23 @@
 		border-color: var(--sun-red);
 	}
 
-	.pull-band {
-		width: 100%;
-		background-color: var(--paper-alt);
-		padding: 4rem 1.5rem;
+	.quote-block {
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
+		align-items: center;
+		width: 100%;
+		max-width: 40rem;
+		text-align: center;
 	}
 
-	.pull-line {
-		max-width: 34rem;
+	.quote-line {
 		margin: 0;
 		font-size: clamp(1.9rem, 5vw, 3rem);
 		line-height: 1.35;
 		color: var(--ink);
 	}
 
-	.pull-byline {
-		max-width: 34rem;
-		width: 100%;
+	.quote-byline {
 		margin-top: 1.25rem;
 		font-size: 0.72rem;
 		text-transform: uppercase;
@@ -414,7 +417,7 @@
 		color: var(--ink-soft);
 	}
 
-	.pull-accent {
+	.quote-accent {
 		color: var(--indigo);
 	}
 

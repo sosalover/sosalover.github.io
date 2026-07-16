@@ -3,6 +3,7 @@
 	import Modal from './Modal.svelte';
 	import SectionContent from './SectionContent.svelte';
 	import SectionWithStickyHeader from './SectionWithStickyHeader.svelte';
+	import { reveal } from '$lib/reveal';
 
 	let showModal = $state(false);
 	let codeInput = $state('');
@@ -10,6 +11,44 @@
 	let codeError = $state(false);
 
 	const correctCode = 'beta2025';
+
+	const bookQuotes = [
+		{
+			before: 'And out of a dream, or a nightmare, I heard her utter: ',
+			accent: '"Thank you."',
+			after: ''
+		},
+		{
+			before: 'I was not the bringer of justice, or even the bringer of medicine. I was the man after them. ',
+			accent: 'I was the grim reaper.',
+			after: ''
+		},
+		{
+			before: "You couldn't really be good in all the ways all the time. ",
+			accent: 'So why even try?',
+			after: ''
+		},
+		{
+			before: "It's different to think like a human than to talk like a human. And it's different to talk than ",
+			accent: 'to be heard.',
+			after: ''
+		},
+		{
+			before: 'One obvious issue with hindsight, though, is that it is ',
+			accent: 'completely meaningless.',
+			after: ''
+		},
+		{
+			before: 'One cannot just forget one little thing. They have to forget everything. And to forget everything would be to ',
+			accent: 'return to pointlessness.',
+			after: ''
+		},
+		{
+			before: 'Love leaves a scar. In a good way, though. In the sense that it is ',
+			accent: 'unforgettable.',
+			after: ''
+		}
+	];
 
 	function openModal() {
 		codeInput = '';
@@ -76,7 +115,7 @@
 				/>
 			</div>
 			<div class="newsletter__copy">
-				<h3 class="newsletter__title">Mockingbirds Talk updates. Spare writing. Publishing journey. </h3>
+				<h3 class="newsletter__title">Mockingbirds Talk updates. Spare writing. Publishing journey. Honest thoughts. </h3>
 				<p class="newsletter__desc">
 					I send a free newsletter every Tuesday morning. Subscribe to get the first chapter of Mockingbirds Talk, see what's going on in my publishing journey, or hear some odd thoughts from a random human. 
 				</p>
@@ -86,17 +125,19 @@
 		</div>
 	</SectionWithStickyHeader>
 
-	<div class="left-align">
-		<SectionWithStickyHeader title={'Mockingbirds Talk Quotes'}>
-			<div class="quote-block">
-				<p class="quote-line">
-					And out of a dream, or a nightmare, I heard her utter:
-					<span class="quote-accent">"Thank you."</span>
-				</p>
-				<p class="quote-byline font-label">— Mockingbirds Talk</p>
-			</div>
-		</SectionWithStickyHeader>
+	<SectionWithStickyHeader title={'Mockingbirds Talk Quotes'}>
+		<div class="quote-grid">
+			{#each bookQuotes as quote}
+				<div class="quote-card" use:reveal>
+					<p class="quote-card__text">
+						{quote.before}<span class="quote-accent">{quote.accent}</span>{quote.after}
+					</p>
+				</div>
+			{/each}
+		</div>
+	</SectionWithStickyHeader>
 
+	<div class="left-align">
 		<SectionWithStickyHeader title={'The Works of Steve Roper'}>
 			<SectionContent
 				title="The Works of Steve Roper"
@@ -177,6 +218,15 @@
 	}
 
 	.left-align :global(.entry__cta) {
+		align-self: center;
+	}
+
+	.left-align .intro {
+		align-items: center;
+		text-align: center;
+	}
+
+	.left-align .intro__cta {
 		align-self: center;
 	}
 
@@ -393,28 +443,39 @@
 		border-color: var(--sun-red);
 	}
 
-	.quote-block {
+	.quote-grid {
 		display: flex;
-		flex-direction: column;
-		align-items: center;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1.75rem;
 		width: 100%;
-		max-width: 40rem;
+		max-width: 64rem;
+	}
+
+	.quote-card {
+		width: 16rem;
+		max-width: 100%;
+		padding: 1.5rem 1.5rem;
+		background: var(--paper);
+		border: 1px solid var(--rule);
+		border-radius: 2px;
 		text-align: center;
+		box-shadow: 0 10px 20px rgba(43, 36, 32, 0.08);
+		transition:
+			transform 0.25s ease,
+			box-shadow 0.25s ease;
 	}
 
-	.quote-line {
+	.quote-card:hover {
+		transform: scale(1.03);
+		box-shadow: 0 16px 28px rgba(43, 36, 32, 0.14);
+	}
+
+	.quote-card__text {
 		margin: 0;
-		font-size: clamp(1.9rem, 5vw, 3rem);
-		line-height: 1.35;
+		font-size: 1.05rem;
+		line-height: 1.6;
 		color: var(--ink);
-	}
-
-	.quote-byline {
-		margin-top: 1.25rem;
-		font-size: 0.72rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		color: var(--ink-soft);
 	}
 
 	.quote-accent {

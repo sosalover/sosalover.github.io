@@ -200,7 +200,7 @@
   @media (min-width: 768px) {
     .entry {
       flex-direction: row;
-      gap: 4rem;
+      gap: 6rem;
       align-items: center;
       padding: 0.5rem 0;
     }

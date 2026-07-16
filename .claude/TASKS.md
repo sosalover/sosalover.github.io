@@ -17,8 +17,13 @@
 
 ## Current Priorities
 
+### P0 - Improve mobile UI
+1. The bouncing arrow is not below the content on mobile.
+2. On Digital creations, the first photo is larger than the viewport. It's causing some horizontal scroll.
+3. Some text is cut off on mobile. Especially the headers below marquee.
+
 ### P1 — High impact, not yet done
-1. **Experience page bullets** — replace placeholder "X million dollars" text with real metrics; style bullets with red accent markers instead of plain list-disc
+1. **Experience page bullets** — replace placeholder "X million dollars" text with 3M; style bullets with red accent markers instead of plain list-disc
 2. **Writing page content** — page feels thin; add more sections (reading list, quotes, or short excerpts) to match the passion described in the copy
 3. **Image optimization** — add `loading="lazy"` to below-fold images; `fetchpriority="high"` to hero images to improve load performance
 4. **Micro-interactions on home tiles** — label badge should slide right slightly on hover (translate-x-2); currently only image scales

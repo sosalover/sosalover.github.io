@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>Experience — Thomas Moh</title>
+  <title>Work Experience — Thomas Moh</title>
 </svelte:head>
 
 <section class="hero">
@@ -23,7 +23,7 @@
 
     <!-- Text Content -->
     <div class="hero__text">
-      <p class="hero__eyebrow font-label">Experience</p>
+      <p class="hero__eyebrow font-label">Work Experience</p>
       <div class="hero__heading">
         <span class="hero__marker" aria-hidden="true"></span>
         <h1 class="hero__title">Thomas Moh</h1>

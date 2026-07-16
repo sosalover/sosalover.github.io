@@ -8,7 +8,12 @@
 	});
 
 	const tiles = [
-		{ href: '/experience', image: '/images/skyline.jpg', text: 'Experience', tag: 'var(--sun-red)' },
+		{
+			href: '/experience',
+			image: '/images/skyline.jpg',
+			text: 'Work Experience',
+			tag: 'var(--sun-red)'
+		},
 		{ href: '/writing', image: '/images/donquixote.avif', text: 'Writing', tag: 'var(--indigo)' },
 		{
 			href: '/physical-creations',

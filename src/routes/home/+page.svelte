@@ -10,14 +10,16 @@
 	const tiles = [
 		{
 			href: '/experience',
-			image: '/images/skyline.jpg',
+			image: '/images/experience-tile-desktop.jpg',
+			imageMobile: '/images/experience-tile-mobile.jpg',
 			text: 'Work Experience',
 			tag: 'var(--sun-red)'
 		},
-		{ href: '/writing', image: '/images/donquixote.avif', text: 'Writing', tag: 'var(--indigo)' },
+		{ href: '/writing', image: '/images/writing/newsletter-bookstore.jpg', text: 'Writing', tag: 'var(--indigo)' },
 		{
 			href: '/physical-creations',
-			image: '/images/bonsai.webp',
+			image: '/images/physical-creations/thomas-bonsaing.jpg',
+			imagePosition: 'center 80%',
 			text: 'Physical Creations',
 			tag: 'var(--mustard)'
 		},
@@ -41,7 +43,17 @@
 			in:fly={mounted ? { y: 20, duration: 400, delay: i * 150 } : { y: 0, duration: 0 }}
 			class="tile group"
 		>
-			<img src={tile.image} alt={tile.text} class="tile-img" />
+			<picture>
+				{#if tile.imageMobile}
+					<source media="(max-width: 640px)" srcset={tile.imageMobile} />
+				{/if}
+				<img
+					src={tile.image}
+					alt={tile.text}
+					class="tile-img"
+					style={tile.imagePosition ? `object-position: ${tile.imagePosition}` : ''}
+				/>
+			</picture>
 			<div class="tile-scrim"></div>
 			<div class="tile-label" style="--tag-color: {tile.tag}">
 				<span class="tile-marker" aria-hidden="true"></span>
@@ -119,21 +131,21 @@
 		transform: translate(-50%, -50%);
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.6rem;
 		background: var(--paper);
 		border: 1px solid var(--rule);
-		padding: 0.6rem 1.1rem;
+		padding: 0.75rem 1.35rem;
 		z-index: 10;
 	}
 	.tile-marker {
-		width: 0.5rem;
-		height: 0.5rem;
+		width: 0.6rem;
+		height: 0.6rem;
 		background: var(--tag-color);
 		border-radius: 1px;
 		flex-shrink: 0;
 	}
 	.tile-text {
-		font-size: 0.85rem;
+		font-size: 1.05rem;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		color: var(--ink);
@@ -176,7 +188,7 @@
 
 	@media (max-width: 640px) {
 		.tile-text {
-			font-size: 0.7rem;
+			font-size: 0.85rem;
 			white-space: normal;
 			text-align: center;
 		}

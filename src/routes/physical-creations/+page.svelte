@@ -100,6 +100,37 @@
     ]}
   ></SectionGallery>
 </SectionWithStickyHeader>
+<SectionWithStickyHeader title="Ash & Walnut Lamp">
+  <SectionGallery
+    title="Ash & Walnut Lamp"
+    paragraph="A table lamp turned from alternating discs of ash and walnut, stacked off-center into a small tower and topped with a linen drum shade."
+    images={[
+      {
+        src: "/images/physical-creations/ash-walnut-lamp.jpg",
+        alt: "a table lamp made of stacked ash and walnut wood discs with a linen shade",
+        caption: "The finished lamp, on the windowsill.",
+      },
+    ]}
+  ></SectionGallery>
+</SectionWithStickyHeader>
+<SectionWithStickyHeader title="Floating Nightstands">
+  <SectionGallery
+    title="Floating Nightstands"
+    paragraph="A pair of wall-mounted nightstands built from plywood, with an open shelf for a lamp and charging cables tucked out of sight."
+    images={[
+      {
+        src: "/images/physical-creations/nightstand-build.jpg",
+        alt: "assembling a plywood nightstand box outdoors in a park",
+        caption: "Assembling one of the boxes in the park.",
+      },
+      {
+        src: "/images/physical-creations/nightstand-finished.jpg",
+        alt: "a finished plywood nightstand mounted on the wall next to a bed",
+        caption: "Mounted next to the bed.",
+      },
+    ]}
+  ></SectionGallery>
+</SectionWithStickyHeader>
 
 <style>
   .hero {

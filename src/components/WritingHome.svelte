@@ -4,6 +4,7 @@
 	import SectionContent from './SectionContent.svelte';
 	import SectionWithStickyHeader from './SectionWithStickyHeader.svelte';
 	import { reveal } from '$lib/reveal';
+	import BirdSVG from '../svgs/BirdSVG.svelte';
 
 	let showModal = $state(false);
 	let codeInput = $state('');
@@ -14,38 +15,23 @@
 
 	const bookQuotes = [
 		{
-			before: 'And out of a dream, or a nightmare, I heard her utter: ',
-			accent: '"Thank you."',
+			before: 'And out of a dream, or a nightmare, I heard her utter: Thank you.',
+			accent: '',
 			after: ''
 		},
 		{
-			before: 'I was not the bringer of justice, or even the bringer of medicine. I was the man after them. ',
-			accent: 'I was the grim reaper.',
+			before: 'Fear. It greeted me like an old friend, and we picked up just where we left off.',
+			accent: '',
 			after: ''
 		},
 		{
-			before: "You couldn't really be good in all the ways all the time. ",
-			accent: 'So why even try?',
+			before: "There we lay, just two bloody animals, two bloody friends.",
+			accent: '',
 			after: ''
 		},
 		{
-			before: "It's different to think like a human than to talk like a human. And it's different to talk than ",
-			accent: 'to be heard.',
-			after: ''
-		},
-		{
-			before: 'One obvious issue with hindsight, though, is that it is ',
-			accent: 'completely meaningless.',
-			after: ''
-		},
-		{
-			before: 'One cannot just forget one little thing. They have to forget everything. And to forget everything would be to ',
-			accent: 'return to pointlessness.',
-			after: ''
-		},
-		{
-			before: 'Love leaves a scar. In a good way, though. In the sense that it is ',
-			accent: 'unforgettable.',
+			before: 'Love leaves a scar. In a good way, though. In the sense that it is unforgettable.',
+			accent: '',
 			after: ''
 		}
 	];
@@ -126,10 +112,13 @@
 	</SectionWithStickyHeader>
 
 	<SectionWithStickyHeader title={'Mockingbirds Talk Quotes'}>
-		<div class="quote-grid">
+		<div class="quote-list">
+			<div class="quote-bird" aria-hidden="true">
+				<BirdSVG />
+			</div>
 			{#each bookQuotes as quote}
-				<div class="quote-card" use:reveal>
-					<p class="quote-card__text">
+				<div class="quote-row" use:reveal>
+					<p class="quote-row__text">
 						{quote.before}<span class="quote-accent">{quote.accent}</span>{quote.after}
 					</p>
 				</div>
@@ -439,43 +428,72 @@
 		border-color: var(--sun-red);
 	}
 
-	.quote-grid {
+	.quote-list {
+		position: relative;
 		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 1.75rem;
+		flex-direction: column;
+		gap: 2.5rem;
 		width: 100%;
-		max-width: 64rem;
+		max-width: 56rem;
+		padding-left: 2.75rem;
 	}
 
-	.quote-card {
-		width: 16rem;
-		max-width: 100%;
-		padding: 1.5rem 1.5rem;
-		background: var(--paper);
-		border: 1px solid var(--rule);
-		border-radius: 2px;
-		text-align: center;
-		box-shadow: 0 10px 20px rgba(43, 36, 32, 0.08);
-		transition:
-			transform 0.25s ease,
-			box-shadow 0.25s ease;
+	.quote-bird {
+		position: absolute;
+		left: 0;
+		top: -0.5rem;
+		width: 1.4rem;
+		height: 1.4rem;
+		color: var(--ink-soft);
+		animation: quote-bird-fly 12s linear infinite;
 	}
 
-	.quote-card:hover {
-		transform: scale(1.03);
-		box-shadow: 0 16px 28px rgba(43, 36, 32, 0.14);
+	.quote-bird :global(svg) {
+		display: block;
+		width: 100%;
+		height: 100%;
 	}
 
-	.quote-card__text {
+	@keyframes quote-bird-fly {
+		0% {
+			top: -0.5rem;
+			opacity: 0;
+			
+		}
+		8% {
+			opacity: 1;
+		}
+		92% {
+			opacity: 1;
+		}
+		100% {
+			top: calc(100% - 0.5rem);
+			opacity: 0;
+		}
+	}
+
+	.quote-row {
+		padding-left: 1.25rem;
+		border-left: 2px solid var(--rule);
+	}
+
+	.quote-row__text {
 		margin: 0;
-		font-size: 1.05rem;
-		line-height: 1.6;
+		font-size: 1.2rem;
+		line-height: 1.75;
 		color: var(--ink);
 	}
 
 	.quote-accent {
 		color: var(--indigo);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.quote-bird {
+			animation: none;
+			top: 50%;
+			opacity: 1;
+		}
 	}
 
 	.modal__title {

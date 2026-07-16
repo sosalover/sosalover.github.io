@@ -72,7 +72,7 @@
 		<img src="/images/writing/author-photo.jpg" alt="Thomas Moh" class="about__portrait" />
 		<div class="about__content">
 			<p class="about__blurb">
-				Hey! I'm Thomas. I'm currently writing and self-publishing my novel, <em
+				Hey! I'm Thomas. I'm currently self-publishing my magical realism novel, <em
 					>Mockingbirds Talk</em
 				>. I write about what it means to be a human. 
 			</p>

@@ -302,7 +302,7 @@
 	/* ---- Footer: quiet, hairline, sun-red used sparingly ---- */
 	.site-footer {
 		flex-shrink: 0;
-		padding: 4rem 1.5rem 3rem;
+		padding: 6rem 1.5rem 4rem;
 		border-top: 1px solid var(--rule);
 	}
 	.footer-inner {

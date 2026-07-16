@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte';
+  import { onDestroy } from "svelte";
 
   let { showModal = $bindable(), header, children } = $props();
 
@@ -10,8 +10,10 @@
     'a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])';
 
   function trapFocus(e: KeyboardEvent) {
-    if (e.key !== 'Tab' || !dialog) return;
-    const focusable = [...dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)];
+    if (e.key !== "Tab" || !dialog) return;
+    const focusable = [
+      ...dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+    ];
     if (focusable.length === 0) return;
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
@@ -30,16 +32,16 @@
       dialog.showModal();
       const first = dialog.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
       if (first) first.focus();
-      dialog.addEventListener('keydown', trapFocus);
+      dialog.addEventListener("keydown", trapFocus);
     } else if (dialog?.open) {
-      dialog.removeEventListener('keydown', trapFocus);
+      dialog.removeEventListener("keydown", trapFocus);
       dialog.close();
       if (previouslyFocused) previouslyFocused.focus();
     }
   });
 
   onDestroy(() => {
-    if (dialog) dialog.removeEventListener('keydown', trapFocus);
+    if (dialog) dialog.removeEventListener("keydown", trapFocus);
     if (previouslyFocused) previouslyFocused.focus();
   });
 </script>
@@ -60,7 +62,10 @@
     <hr />
     {@render children?.()}
     <hr />
-    <button class="mb-4 focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2" onclick={() => dialog?.close()}>Close</button>
+    <button
+      class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+      onclick={() => dialog?.close()}>Close</button
+    >
   </div>
 </dialog>
 
@@ -78,12 +83,14 @@
     z-index: 50;
     max-height: 90vh;
     margin: 0;
+    color: var(--ink);
+    font-family: var(--font-serif);
   }
 
   @media (min-width: 640px) {
     dialog {
       max-width: 32em;
-      border-radius: 0.2em;
+      border-radius: 0;
       top: 25%;
       bottom: auto;
       margin: auto;
@@ -92,16 +99,22 @@
   }
 
   dialog::backdrop {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(43, 36, 32, 0.35);
   }
 
   dialog > .modal-content {
-    padding: 1em;
-    background: white;
-    border-radius: 0.5em;
+    padding: 1.5em;
+    background: var(--paper);
+    border: 1px solid var(--rule);
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
+  }
+
+  dialog hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 1em 0;
   }
 
   /* For the mobile view */
@@ -136,17 +149,25 @@
 
   /* Button styling */
   button {
-    display: block;
+    display: inline-block;
     margin-top: 1em;
-    padding: 0.5em;
+    padding: 0.4em 0;
     border: none;
-    background-color: #4caf50;
-    color: white;
+    background: none;
+    color: var(--ink);
     cursor: pointer;
-    border-radius: 0.25em;
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border-bottom: 1px solid var(--ink);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
   }
 
   button:hover {
-    background-color: #45a049;
+    color: var(--sun-red);
+    border-color: var(--sun-red);
   }
 </style>

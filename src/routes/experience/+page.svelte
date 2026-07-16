@@ -7,58 +7,58 @@
 </script>
 
 <svelte:head>
-	<title>Experience — Thomas Moh</title>
+  <title>Experience — Thomas Moh</title>
 </svelte:head>
 
-<section class="min-h-screen flex items-center py-16 px-4 bg-white text-black">
-  <div
-    class="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-4 md:gap-12"
-  >
+<section class="hero">
+  <div class="hero__inner">
     <!-- Image -->
-    <div class="pt-4 md:pt-0 w-3/4 md:w-1/2">
+    <div class="hero__media">
       <img
         src="/images/experience/serving.jpeg"
         alt="Thomas Working"
-        class="w-full rounded-lg shadow-lg object-cover aspect-square"
+        class="hero__image"
       />
     </div>
 
     <!-- Text Content -->
-    <div class="w-full md:w-1/2 text-center md:text-left">
-      <h1
-        class="clip-right-angle text-4xl font-extrabold text-white bg-black inline-block px-4 py-2 mb-4 md:pr-20"
-      >
-        Thomas Moh
-      </h1>
-      <p class="text-lg mb-4">
+    <div class="hero__text">
+      <p class="hero__eyebrow font-label">Experience</p>
+      <div class="hero__heading">
+        <span class="hero__marker" aria-hidden="true"></span>
+        <h1 class="hero__title">Thomas Moh</h1>
+      </div>
+      <p class="hero__lead">
         I am a Software Engineer interested in frontend architecture, system
         design, and human-computer interaction.
       </p>
-      <p class="text-lg mb-4">
+      <p class="hero__lead">
         I graduated from Northwestern University with a degree in Computer
         Science.
       </p>
-      <p class="text-lg mb-6">
+      <p class="hero__lead">
         I've worked as a frontend engineer, UX designer, and a data engineer.
       </p>
-      <div class="flex justify-center md:justify-start gap-6 items-center">
+      <div class="hero__actions">
         <a
           href="/Thomas_Moh_SE_Resume.pdf"
           download="ThomasMoh_Resume"
-          class="bg-red-400 text-white px-4 py-2 text-lg font-semibold hover:scale-105 transition-transform clip-right-angle"
+          class="hero__cta font-label"
         >
-          My Resume
+          My Resume →
         </a>
         <a
           href="https://www.linkedin.com/in/thomas-moh-39ab27196/"
-          class="text-2xl text-blue-600 hover:scale-110 transition-transform"
+          class="hero__social"
+          aria-label="LinkedIn"
           target="_blank"
         >
           <LinkedInSvgLarge />
         </a>
         <a
           href="https://github.com/tmoh-figs"
-          class="text-2xl text-black hover:scale-110 transition-transform"
+          class="hero__social"
+          aria-label="GitHub"
           target="_blank"
         >
           <GithubSvgDark />
@@ -135,3 +135,140 @@
     imageAlt="Amazon Logo"
   ></SectionContent>
 </SectionWithStickyHeader>
+
+<style>
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+
+  .hero__inner {
+    max-width: 64rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero__media {
+    width: 75%;
+  }
+
+  .hero__image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+
+  .hero__text {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero__eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-soft);
+  }
+
+  .hero__heading {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__marker {
+    width: 0.55rem;
+    height: 0.55rem;
+    flex-shrink: 0;
+    background: var(--sun-red);
+    border-radius: 1px;
+  }
+
+  .hero__title {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .hero__lead {
+    margin: 0 auto 1rem;
+    max-width: 34rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .hero__actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .hero__cta {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 3px;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .hero__cta:hover {
+    color: var(--sun-red);
+    border-color: var(--sun-red);
+  }
+
+  .hero__social {
+    font-size: 1.5rem;
+    color: var(--ink-soft);
+    transition: color 0.2s ease;
+  }
+
+  .hero__social:hover {
+    color: var(--ink);
+  }
+
+  @media (min-width: 768px) {
+    .hero__inner {
+      flex-direction: row-reverse;
+      gap: 4rem;
+    }
+
+    .hero__media {
+      width: 50%;
+    }
+
+    .hero__text {
+      width: 50%;
+      text-align: left;
+    }
+
+    .hero__heading {
+      display: flex;
+    }
+
+    .hero__lead {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .hero__actions {
+      justify-content: flex-start;
+    }
+  }
+</style>

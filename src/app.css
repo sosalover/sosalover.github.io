@@ -6,12 +6,48 @@
   }
 }
 
+:root {
+  --paper: #faf6ef;
+  --paper-alt: #efe6d8;
+  --ink: #2b2420;
+  --ink-soft: #55493f;
+  --sun-red: #bc002d;
+  --indigo: #3d5a72;
+  --mustard: #d9a441;
+  --sage: #8a9a80;
+  --rule: rgba(43, 36, 32, 0.15);
+  --font-serif: 'Gowun Batang', Georgia, 'Times New Roman', serif;
+  --font-label: 'Gowun Dodum', 'Noto Sans KR', sans-serif;
+}
+
 body {
-    font-family: "Syne", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-  }
+  position: relative;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+
+/* Faint paper grain — quiet, not "distressed". */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.015;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+}
+
+.font-label {
+  font-family: var(--font-label);
+}
 
 /* Page transitions */
 @keyframes fade-in { from { opacity: 0; transform: translateY(8px); } }

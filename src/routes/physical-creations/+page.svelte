@@ -5,30 +5,25 @@
 </script>
 
 <svelte:head>
-	<title>Physical Creations — Thomas Moh</title>
+  <title>Physical Creations — Thomas Moh</title>
 </svelte:head>
 
-<section
-  class="text-black py-16 px-4 text-center md:text-left h-screen flex items-center relative"
->
-  <div
-    class="max-w-7xl mx-auto flex gap-8 flex-col-reverse md:flex-row items-center"
-  >
-    <div class="md:w-1/2">
-      <h1
-        class="clip-right-angle text-white text-4xl font-extrabold mb-4 pr-30 bg-black p-2 w-fit"
-      >
-        Physical Creations
-      </h1>
-      <p class="text-lg mb-6">
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__text">
+      <div class="hero__heading">
+        <span class="hero__marker" aria-hidden="true"></span>
+        <h1 class="hero__title">Physical Creations</h1>
+      </div>
+      <p class="hero__lead">
         I like to work with my hands and realize things that I imagine.
       </p>
     </div>
-    <div class=" md:w-1/2 mt-8 md:mt-0">
+    <div class="hero__media">
       <img
         src="/images/physical-creations/thomas-bonsaing.jpg"
         alt="Thomas Working"
-        class="w-full rounded-lg shadow-lg aspect-square object-cover"
+        class="hero__image"
       />
     </div>
   </div>
@@ -105,3 +100,94 @@
     ]}
   ></SectionGallery>
 </SectionWithStickyHeader>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 1.5rem 4rem;
+  }
+
+  .hero__inner {
+    max-width: 64rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero__text {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero__heading {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__marker {
+    width: 0.55rem;
+    height: 0.55rem;
+    flex-shrink: 0;
+    background: var(--sage);
+    border-radius: 1px;
+  }
+
+  .hero__title {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .hero__lead {
+    margin: 0 auto;
+    max-width: 34rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .hero__media {
+    width: 100%;
+  }
+
+  .hero__image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+
+  @media (min-width: 768px) {
+    .hero__inner {
+      flex-direction: row;
+      gap: 4rem;
+    }
+
+    .hero__text {
+      width: 50%;
+      text-align: left;
+    }
+
+    .hero__heading {
+      display: flex;
+    }
+
+    .hero__lead {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .hero__media {
+      width: 50%;
+    }
+  }
+</style>

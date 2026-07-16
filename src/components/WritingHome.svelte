@@ -54,15 +54,23 @@
 
 	onMount(() => {
 		const w = /** @type {any} */ (window);
-		if (!w.ml) {
-			w.ml = function () {
-				(w.ml.q = w.ml.q || []).push(arguments);
-			};
-			const script = document.createElement('script');
-			script.async = true;
-			script.src = 'https://assets.mailerlite.com/js/universal.js';
-			document.head.appendChild(script);
-		}
+		// MailerLite's universal.js only scans the DOM for `.ml-embedded` once,
+		// on load. SvelteKit's client-side routing recreates that div each time
+		// this component remounts, so reusing the cached `w.ml` (guarded by
+		// `if (!w.ml)`) leaves the new div unrendered. Reload the script fresh
+		// on every mount to force a rescan.
+		delete w.ml;
+		document
+			.querySelectorAll('script[src="https://assets.mailerlite.com/js/universal.js"]')
+			.forEach((s) => s.remove());
+
+		w.ml = function () {
+			(w.ml.q = w.ml.q || []).push(arguments);
+		};
+		const script = document.createElement('script');
+		script.async = true;
+		script.src = 'https://assets.mailerlite.com/js/universal.js';
+		document.head.appendChild(script);
 		w.ml('account', '2512820');
 	});
 </script>

@@ -8,24 +8,83 @@
   }[];
 </script>
 
-<section class=" py-12 max-w-7xl mx-auto text-center">
+<section class="gallery">
   <!-- Title -->
-  <h2 class="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
+  <h2 class="gallery__title">{title}</h2>
 
   <!-- Paragraph -->
-  <p class="text-lg text-gray-700 mb-10 max-w-2xl mx-auto">{paragraph}</p>
+  <p class="gallery__paragraph">{paragraph}</p>
 
   <!-- Image Grid -->
-  <div class="grid grid-cols-2 md:auto-cols-fr md:grid-flow-col gap-6">
+  <div class="gallery__grid">
     {#each images as image}
-      <div class="flex flex-col items-center">
-        <img
-          src={image.src}
-          alt={image.alt}
-          class="rounded-lg shadow-md object-cover w-full aspect-square"
-        />
-        <p class="mt-2 text-sm md:text-l text-gray-600">{image.caption}</p>
-      </div>
+      <figure class="gallery__figure">
+        <img src={image.src} alt={image.alt} class="gallery__image" />
+        <figcaption class="gallery__caption font-label">
+          {image.caption}
+        </figcaption>
+      </figure>
     {/each}
   </div>
 </section>
+
+<style>
+  .gallery {
+    width: 100%;
+    max-width: 64rem;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .gallery__title {
+    margin: 0 0 1rem;
+    font-size: 1.85rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .gallery__paragraph {
+    max-width: 38rem;
+    margin: 0 auto 3rem;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.5rem;
+    text-align: left;
+  }
+
+  .gallery__figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .gallery__image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+
+  .gallery__caption {
+    font-size: 0.78rem;
+    line-height: 1.6;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 768px) {
+    .gallery__grid {
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      grid-template-columns: none;
+    }
+  }
+</style>

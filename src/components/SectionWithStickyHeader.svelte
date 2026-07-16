@@ -1,64 +1,68 @@
 <script>
-	export let title;
+  export let title;
 </script>
 
-<section class="relative">
-	<!-- Sticky header -->
-	<div class="sticky top-16 bg-black px-4 py-2 z-10 overflow-hidden max-w-screen">
-		<div class="flex items-center gap-4 whitespace-nowrap">
-			<!-- Main solid title -->
-			<h2 class="text-base md:text-2xl font-bold text-white shrink-0 underline z-10">
-				{title}
-			</h2>
+<section class="section">
+  <!-- Sticky header -->
+  <div class="sticky-header">
+    <span class="marker" aria-hidden="true"></span>
+    <h2 class="section-title font-label">{title}</h2>
+  </div>
 
-			<!-- Marquee scrolling echoed titles (decorative) -->
-			<div class="marquee-container overflow-hidden" aria-hidden="true">
-				<div class="marquee-track">
-					{#each Array(20) as _}
-						<span class="text-base md:text-xl font-bold text-red-400 select-none shrink-0 mx-2">
-							{title}
-						</span>
-					{/each}
-					{#each Array(20) as _}
-						<span class="text-base md:text-xl font-bold text-red-400 select-none shrink-0 mx-2">
-							{title}
-						</span>
-					{/each}
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Section content -->
-	<div class="px-4 py-2 md:py-20 md:flex md:justify-center">
-		<slot />
-	</div>
+  <!-- Section content -->
+  <div class="section-body">
+    <slot />
+  </div>
 </section>
 
 <style>
-	.marquee-container {
-		flex: 1;
-		overflow: hidden;
-	}
+  .section {
+    position: relative;
+    background-color: var(--paper);
+  }
 
-	.marquee-track {
-		display: flex;
-		width: max-content;
-		animation: marquee 60s linear infinite;
-	}
+  .section:nth-of-type(even) {
+    background-color: var(--paper-alt);
+  }
 
-	@media (max-width: 768px) {
-		.marquee-track {
-			animation-duration: 90s;
-		}
-	}
+  .sticky-header {
+    position: sticky;
+    top: 4rem;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 1.5rem;
+    background-color: inherit;
+    border-bottom: 1px solid var(--rule);
+  }
 
-	@keyframes marquee {
-		0% {
-			transform: translateX(0);
-		}
-		100% {
-			transform: translateX(-50%);
-		}
-	}
+  .marker {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex-shrink: 0;
+    background: var(--sun-red);
+    border-radius: 1px;
+  }
+
+  .section-title {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .section-body {
+    padding: 3rem 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .section-body {
+      padding: 5rem 1.5rem;
+    }
+  }
 </style>

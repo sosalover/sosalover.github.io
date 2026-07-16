@@ -188,19 +188,25 @@
   <link rel="preload" as="image" href={"/images/grassBackground.jpg"} />
 </svelte:head>
 
-<div class="flex flex-col md:flex-row bg-gray-800 items-center justify-center">
+<div class="garden">
   <!-- Header -->
-  <header class="text-center p-4 bg-gray-800 text-white">
-    <h1 class="text-3xl">Digital Garden</h1>
+  <header class="garden__header">
+    <span class="garden__marker" aria-hidden="true"></span>
+    <h1 class="garden__title">Digital Garden</h1>
     <p class="sr-only">
-      Use arrow keys to move the player around the grid. Press Space, 1, 2, or 3 to harvest nearby items.
+      Use arrow keys to move the player around the grid. Press Space, 1, 2, or 3
+      to harvest nearby items.
     </p>
   </header>
 
   <!-- Main Content Section (Grid and Preview Panel) -->
   <div class="flex-1 p-4">
     <div class="grid-container">
-      <div class="grid grid-cols-16 grid-rows-16" role="grid" aria-label="Digital garden grid - use arrow keys to move">
+      <div
+        class="grid grid-cols-16 grid-rows-16"
+        role="grid"
+        aria-label="Digital garden grid - use arrow keys to move"
+      >
         {#each Array(gridSize) as _, rowIndex}
           {#each Array(gridSize) as _, colIndex}
             {#if items[rowIndex][colIndex] !== null || (playerPosition.x === colIndex && playerPosition.y === rowIndex)}
@@ -211,7 +217,8 @@
                 class:yellow={legalPath[rowIndex][colIndex] === 1}
                 style="grid-column: {colIndex + 1}; grid-row: {rowIndex + 1};"
                 role="gridcell"
-                aria-label={playerPosition.x === colIndex && playerPosition.y === rowIndex
+                aria-label={playerPosition.x === colIndex &&
+                playerPosition.y === rowIndex
                   ? `Player position (row ${rowIndex + 1}, column ${colIndex + 1})`
                   : items[rowIndex][colIndex]
                     ? `${items[rowIndex][colIndex].title} at row ${rowIndex + 1}, column ${colIndex + 1}`
@@ -251,7 +258,7 @@
     </div>
   </div>
 
-  <p class=" text-white">Controls:</p>
+  <p class="garden__label font-label">Controls:</p>
   <div
     class="w-full p-2 md:w-1/3 mt-4 md:mt-0 md:p-4 md:h-full flex md:flex-col items-center gap-4"
   >
@@ -260,7 +267,7 @@
       <div class="controls grid grid-cols-3 gap-2 w-32">
         <div></div>
         <button
-          class="bg-gray-700 text-white py-2 px-4 rounded focus-visible:ring-2 focus-visible:ring-white"
+          class="garden__dir"
           onclick={() => movePlayer("up")}
           disabled={!canMove("up")}
           aria-label="Move up"
@@ -270,7 +277,7 @@
         <div></div>
 
         <button
-          class="bg-gray-700 text-white py-2 px-4 rounded focus-visible:ring-2 focus-visible:ring-white"
+          class="garden__dir"
           onclick={() => movePlayer("left")}
           disabled={!canMove("left")}
           aria-label="Move left"
@@ -279,7 +286,7 @@
         </button>
         <div></div>
         <button
-          class="bg-gray-700 text-white py-2 px-4 rounded focus-visible:ring-2 focus-visible:ring-white"
+          class="garden__dir"
           onclick={() => movePlayer("right")}
           disabled={!canMove("right")}
           aria-label="Move right"
@@ -289,7 +296,7 @@
 
         <div></div>
         <button
-          class="bg-gray-700 text-white py-2 px-4 rounded focus-visible:ring-2 focus-visible:ring-white"
+          class="garden__dir"
           onclick={() => movePlayer("down")}
           disabled={!canMove("down")}
           aria-label="Move down"
@@ -301,9 +308,9 @@
     </div>
     <div class="flex flex-col items-center flex-1/2">
       {#each availableItems as item, index}
-        <p class=" text-white">Harvest</p>
+        <p class="garden__label font-label">Harvest</p>
         <button
-          class="bg-blue-500 text-white py-2 px-4 rounded m-2 focus-visible:ring-2 focus-visible:ring-white"
+          class="garden__harvest font-label"
           onclick={() => {
             selectedItem = item;
             showModal = true;
@@ -312,7 +319,7 @@
         >
           {item?.title}
         </button>
-        <p class="text-white hidden md:flex">
+        <p class="garden__hint font-label hidden md:flex">
           {`(${harvestingControlsList[index]})`}
         </p>
       {/each}
@@ -357,16 +364,93 @@
     margin-bottom: 40px;
   }
 
-  button {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
+  .garden {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--paper-alt);
   }
 
-  button:disabled {
-    background-color: #ccc;
+  @media (min-width: 768px) {
+    .garden {
+      flex-direction: row;
+    }
+  }
+
+  .garden__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.85rem;
+    padding: 1rem;
+    color: var(--ink);
+  }
+
+  .garden__marker {
+    width: 0.55rem;
+    height: 0.55rem;
+    flex-shrink: 0;
+    background: var(--sage);
+    border-radius: 1px;
+  }
+
+  .garden__title {
+    font-size: 1.85rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .garden__label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+  }
+
+  .garden__hint {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+
+  .garden__dir,
+  .garden__harvest {
+    padding: 0.5rem 1rem;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition:
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .garden__harvest {
+    margin: 0.5rem;
+    border-color: var(--indigo);
+    color: var(--indigo);
+  }
+
+  .garden__dir:hover:not(:disabled),
+  .garden__harvest:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .garden__dir:focus-visible,
+  .garden__harvest:focus-visible {
+    outline: 2px solid var(--indigo);
+    outline-offset: 2px;
+  }
+
+  .garden__dir:disabled {
+    opacity: 0.4;
+    cursor: default;
   }
 
   .grid-container {

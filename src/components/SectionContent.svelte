@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { reveal } from '$lib/reveal';
+  import { reveal } from "$lib/reveal";
   export let title = "";
   export let description = "";
   export let ctaText = "";
@@ -10,35 +10,35 @@
   export let imageAlt = "";
   export let reverse = false;
   export let video: string | null = null;
+  export let accent = "var(--indigo)";
 </script>
 
 <div
   use:reveal
-  class="flex flex-col md:flex-row gap-8 md:gap-24 items-center md:py-2 py-6 {reverse
-    ? 'md:flex-row-reverse'
-    : ''}"
+  class="entry {reverse ? 'entry--reverse' : ''}"
+  style="--accent: {accent}"
 >
-  <!-- Left: Text content (1/3 width on md+) -->
-  <div class="w-full md:w-2/5 space-y-6 md:px-10 justify-center border-l-4 border-red-400 pl-4">
-    <h3
-      class="text-2xl md:text-3xl font-bold md:bg-black clip-right-angle md:text-white py-2 md:pl-2 md:pr-8 w-fit"
-    >
-      {title}
-    </h3>
-    <p class="text-gray-700 text-lg">{description}</p>
+  <!-- Text content -->
+  <div class="entry__text">
+    <div class="entry__heading">
+      <span class="entry__marker" aria-hidden="true"></span>
+      <h3 class="entry__title">{title}</h3>
+    </div>
+
+    <p class="entry__desc">{description}</p>
 
     {#if ctaText}
       <a
         href={ctaHref}
-        class="hover:scale-110 transition underline clip-right-angle inline-block px-4 py-2 bg-red-400 text-white focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 hover:shadow-lg hover:shadow-red-400/30"
+        class="entry__cta font-label"
         aria-label="{ctaText} - {title}"
       >
-        {ctaText}
+        {ctaText} →
       </a>
     {/if}
 
     {#if bullets.length}
-      <ul class="list-disc list-inside text-gray-800 space-y-1">
+      <ul class="entry__bullets">
         {#each bullets as bullet}
           <li>{bullet}</li>
         {/each}
@@ -46,44 +46,180 @@
     {/if}
 
     {#if skills.length}
-      <div class="flex flex-wrap gap-2 pt-2">
-        {#each skills as skill, i}
-          <span
-            class={`text-sm font-medium px-3 py-1 ${
-              i === 0
-                ? "bg-red-200 text-red-800 clip-right-angle"
-                : "bg-red-200 text-red-800 -skew-x-7"
-            }`}
-          >
-            <span class={i !== 0 ? "skew-x-7 block" : ""}>
-              {skill}
-            </span>
-          </span>
+      <div class="entry__skills font-label">
+        {#each skills as skill}
+          <span class="entry__skill">{skill}</span>
         {/each}
       </div>
     {/if}
   </div>
 
-  <!-- Right: Image (2/3 width on md+, centered) -->
-  <a href={ctaHref} class="w-full flex justify-center px-4 md:px-0 focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 rounded-md" aria-label="View {title}">
+  <!-- Image / video -->
+  <a href={ctaHref} class="entry__media" aria-label="View {title}">
     {#if video}
-      <video
-        class="w-2/3 h-2/3 rounded-md object-contain"
-        src={video}
-        autoplay
-        loop
-        muted
-        playsinline
+      <video class="entry__asset" src={video} autoplay loop muted playsinline
       ></video>
-    {/if}
-    {#if !video}
-      <img
-        src={imageSrc}
-        alt={imageAlt}
-        class="w-full max-w-2xl rounded-md {!!ctaHref
-          ? 'shadow-md'
-          : ''} object-contain {!!ctaHref ? 'hover:scale-105' : ''} transition"
-      />
+    {:else}
+      <img class="entry__asset" src={imageSrc} alt={imageAlt} />
     {/if}
   </a>
 </div>
+
+<style>
+  .entry {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    width: 100%;
+    max-width: 64rem;
+    padding: 1.5rem 0;
+  }
+
+  .entry__text {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .entry__heading {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+  }
+
+  .entry__marker {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex-shrink: 0;
+    background: var(--accent);
+    border-radius: 1px;
+    transform: translateY(-0.15rem);
+  }
+
+  .entry__title {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+
+  .entry__desc {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .entry__cta {
+    align-self: flex-start;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .entry__cta:hover {
+    color: var(--sun-red);
+    border-color: var(--sun-red);
+  }
+
+  .entry__cta:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .entry__bullets {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .entry__bullets li {
+    position: relative;
+    padding-left: 1.1rem;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .entry__bullets li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    width: 0.35rem;
+    height: 0.35rem;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+
+  .entry__skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    padding-top: 0.25rem;
+  }
+
+  .entry__skill {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+  }
+
+  .entry__media {
+    display: block;
+    width: 100%;
+    border-radius: 2px;
+  }
+
+  .entry__media:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  .entry__asset {
+    width: 100%;
+    display: block;
+    object-fit: contain;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+  }
+
+  @media (min-width: 768px) {
+    .entry {
+      flex-direction: row;
+      gap: 6rem;
+      align-items: center;
+      padding: 0.5rem 0;
+    }
+
+    .entry--reverse {
+      flex-direction: row-reverse;
+    }
+
+    .entry__text {
+      width: 42%;
+      flex-shrink: 0;
+    }
+
+    .entry__media {
+      width: 58%;
+    }
+
+    .entry__title {
+      font-size: 1.85rem;
+    }
+  }
+</style>

@@ -2,7 +2,8 @@ module.exports = {
     theme: {
       extend: {
         fontFamily: {
-          sans: ['Syne'], 
+          sans: ['Gowun Dodum', 'sans-serif'],
+          serif: ['Gowun Batang', 'serif'],
         },
       },
     },

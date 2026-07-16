@@ -9,7 +9,7 @@
 	let mobileMenuOpen = $state(false);
 
 	const navLinks = [
-		{ href: '/experience', label: 'Experience' },
+		{ href: '/experience', label: 'Work Experience' },
 		{ href: '/writing', label: 'Writing' },
 		{ href: '/physical-creations', label: 'Physical Creations' },
 		{ href: '/digital-creations', label: 'Digital Creations' },
@@ -52,7 +52,11 @@
 	<!-- HEADER -->
 	<nav class="site-nav">
 		<div class="flex h-full items-center justify-between">
-			<a href="/" class="nav-brand font-label" aria-current={isActive('/') ? 'page' : undefined}>
+			<a
+				href="/home"
+				class="nav-brand font-label"
+				aria-current={isActive('/home') ? 'page' : undefined}
+			>
 				THOMAS MOH
 			</a>
 

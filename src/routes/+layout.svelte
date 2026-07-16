@@ -40,9 +40,14 @@
 	<meta property="og:title" content="Thomas Moh" />
 	<meta property="og:description" content="Developer, creator, and writer." />
 	<meta property="og:type" content="website" />
-	<meta name="twitter:card" content="summary" />
+	<meta property="og:image" content="https://thomasmoh.vercel.app/images/writing/newsletter-bookstore.jpg" />
+	<meta property="og:image:width" content="1600" />
+	<meta property="og:image:height" content="900" />
+	<meta property="og:image:alt" content="Thomas on an escalator in front of a floor-to-ceiling library wall" />
+	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="Thomas Moh" />
 	<meta name="twitter:description" content="Developer, creator, and writer." />
+	<meta name="twitter:image" content="https://thomasmoh.vercel.app/images/writing/newsletter-bookstore.jpg" />
 	<meta name="description" content="Developer, creator, and writer." />
 </svelte:head>
 

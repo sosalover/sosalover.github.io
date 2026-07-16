@@ -204,10 +204,6 @@
 		gap: 2rem;
 	}
 
-	.left-align :global(.section-body) {
-		justify-content: flex-start;
-	}
-
 	.left-align :global(.entry__text) {
 		align-items: center;
 		text-align: center;

@@ -5,6 +5,9 @@
 	import LinkedinSvg from '../svgs/LinkedinSVG.svelte';
 	import { onNavigate } from '$app/navigation';
 	import { page } from '$app/state';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+
+	injectAnalytics();
 
 	let mobileMenuOpen = $state(false);
 

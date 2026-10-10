@@ -1,0 +1,9 @@
+{
+	"redirects": [
+		{
+			"source": "/timebank-privacy-policy",
+			"destination": "/screen-grove/privacy",
+			"permanent": true
+		}
+	]
+}

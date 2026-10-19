@@ -4,6 +4,11 @@
 			"source": "/timebank-privacy-policy",
 			"destination": "/screen-grove/privacy",
 			"permanent": true
+		},
+		{
+			"source": "/mockingbirds",
+			"destination": "/#newsletter",
+			"permanent": false
 		}
 	]
 }

@@ -100,7 +100,7 @@
 	</section>
 
 	<SectionWithStickyHeader title={'Newsletter'}>
-		<div class="newsletter">
+		<div class="newsletter" id="newsletter">
 			<div class="newsletter__media">
 				<img
 					src="/images/writing/newsletter-bookstore.jpg"
@@ -300,6 +300,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 2rem;
+		scroll-margin-top: 6rem;
 		width: 100%;
 		max-width: 64rem;
 		min-width: 0;

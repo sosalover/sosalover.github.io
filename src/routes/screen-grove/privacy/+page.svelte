@@ -4,19 +4,20 @@
 
 <div class="pt-24 pb-20 px-8 max-w-3xl mx-auto text-[var(--ink)]">
 	<h1 class="text-4xl font-extrabold tracking-wide mb-2">Screen Grove</h1>
-	<p class="text-[var(--ink-soft)] text-sm mb-10">Privacy Policy — Last updated October 2026</p>
+	<p class="text-[var(--ink-soft)] text-sm mb-10">Privacy Policy — Last updated November 2026</p>
 
 	<section class="mb-8">
 		<p class="text-[var(--ink-soft)] leading-relaxed">
 			Screen Grove shows your daily screen-time budget as a tree. It's built so that your data
-			stays on your iPhone.
+			stays on your iPhone. The only exception is the optional Grove+ subscription, described
+			below.
 		</p>
 	</section>
 
 	<section class="mb-8">
-		<h2 class="text-xl font-bold mb-3 text-[var(--sun-red)]">What We Collect: Nothing</h2>
+		<h2 class="text-xl font-bold mb-3 text-[var(--sun-red)]">What We Collect: Almost Nothing</h2>
 		<p class="text-[var(--ink-soft)] leading-relaxed">
-			Screen Grove has no accounts, no servers, no analytics and no ads. We don't receive any
+			Screen Grove has no accounts, no analytics and no ads. Without Grove+, we don't receive any
 			information about you or how you use your phone.
 		</p>
 	</section>
@@ -41,6 +42,18 @@
 	</section>
 
 	<section class="mb-8">
+		<h2 class="text-xl font-bold mb-3 text-[var(--sun-red)]">Grove+ (Optional Subscription)</h2>
+		<p class="text-[var(--ink-soft)] leading-relaxed">
+			If you subscribe to Grove+, the app sends our server (hosted on Cloudflare) your
+			subscription's App Store transaction ID and the dates of your good days (days your tree was
+			still standing at midnight). We use them only to check your subscription with Apple and to
+			count the real trees we plant for you through GoodAPI, planted by Veritree. No usage figures,
+			app names or personal details are sent. Payments are handled by Apple, and we never see your
+			payment details. If your subscription ends, we stop counting.
+		</p>
+	</section>
+
+	<section class="mb-8">
 		<h2 class="text-xl font-bold mb-3 text-[var(--sun-red)]">Notifications</h2>
 		<p class="text-[var(--ink-soft)] leading-relaxed">
 			If you allow them, Screen Grove shows a local notification when you reach your budget.
@@ -51,15 +64,15 @@
 	<section class="mb-8">
 		<h2 class="text-xl font-bold mb-3 text-[var(--sun-red)]">Children</h2>
 		<p class="text-[var(--ink-soft)] leading-relaxed">
-			Screen Grove is not directed at children under 13 and collects no data from anyone.
+			Screen Grove is not directed at children under 13.
 		</p>
 	</section>
 
 	<section class="mb-8">
 		<h2 class="text-xl font-bold mb-3 text-[var(--sun-red)]">Changes</h2>
 		<p class="text-[var(--ink-soft)] leading-relaxed">
-			If this changes (for example, if we add optional purchases), we'll update this page and the
-			date above before the change ships.
+			If what we collect changes, we'll update this page and the date above before the change
+			ships.
 		</p>
 	</section>
 

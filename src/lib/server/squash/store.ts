@@ -10,17 +10,26 @@ export type Match = {
 	score: string | null;
 	date: string; // YYYY-MM-DD
 	createdAt: number;
+	/** Set on matches logged together from the session grid, so the batch can be undone. */
+	sessionId?: string;
+	/** Soft delete: the ladder ignores the match, but it can be restored. */
+	deletedAt?: number | null;
+	editedAt?: number;
 };
 
 const PLAYERS = 'squash:players';
-const MATCHES = 'squash:matches';
+// Matches live in a hash (id → match) so one can be edited or deleted without
+// rewriting the rest. LEGACY_MATCHES is the original list, migrated on first read.
+const MATCHES = 'squash:match';
+const LEGACY_MATCHES = 'squash:matches';
 
 interface Store {
 	players(): Promise<Player[]>;
-	matches(): Promise<Match[]>;
 	addPlayer(p: Player): Promise<void>;
-	addMatch(m: Match): Promise<void>;
-	addMatches(ms: Match[]): Promise<void>;
+	/** Every match, including soft-deleted ones. */
+	matches(): Promise<Match[]>;
+	/** Insert or replace matches by id. */
+	putMatches(ms: Match[]): Promise<void>;
 }
 
 class RedisStore implements Store {
@@ -29,38 +38,48 @@ class RedisStore implements Store {
 		const h = await this.r.hgetall<Record<string, Player>>(PLAYERS);
 		return h ? Object.values(h) : [];
 	}
-	async matches() {
-		return (await this.r.lrange<Match>(MATCHES, 0, -1)) ?? [];
-	}
 	async addPlayer(p: Player) {
 		await this.r.hset(PLAYERS, { [p.id]: p });
 	}
-	async addMatch(m: Match) {
-		await this.r.rpush(MATCHES, m);
+	async matches() {
+		const legacy = (await this.r.lrange<Match>(LEGACY_MATCHES, 0, -1)) ?? [];
+		if (legacy.length) {
+			// HSETNX never overwrites a match that's already in the hash. Only once every
+			// match is confirmed copied is the list moved aside (kept as a backup, not deleted).
+			const p = this.r.pipeline();
+			for (const m of legacy) p.hsetnx(MATCHES, m.id, m);
+			await p.exec();
+			const copied = new Set(await this.r.hkeys(MATCHES));
+			if (legacy.every((m) => copied.has(m.id))) {
+				// Two requests can migrate at once; whichever renames second finds no list. Fine.
+				await this.r
+					.rename(LEGACY_MATCHES, `${LEGACY_MATCHES}:backup:${Date.now()}`)
+					.catch(() => {});
+			}
+		}
+		const h = await this.r.hgetall<Record<string, Match>>(MATCHES);
+		return h ? Object.values(h) : [];
 	}
-	async addMatches(ms: Match[]) {
-		if (ms.length) await this.r.rpush(MATCHES, ...ms);
+	async putMatches(ms: Match[]) {
+		if (ms.length) await this.r.hset(MATCHES, Object.fromEntries(ms.map((m) => [m.id, m])));
 	}
 }
 
 // Dev-only fallback so the app runs locally without a Redis store.
 class MemoryStore implements Store {
 	p = new Map<string, Player>();
-	m: Match[] = [];
+	m = new Map<string, Match>();
 	async players() {
 		return [...this.p.values()];
-	}
-	async matches() {
-		return [...this.m];
 	}
 	async addPlayer(p: Player) {
 		this.p.set(p.id, p);
 	}
-	async addMatch(m: Match) {
-		this.m.push(m);
+	async matches() {
+		return [...this.m.values()].map((m) => ({ ...m }));
 	}
-	async addMatches(ms: Match[]) {
-		this.m.push(...ms);
+	async putMatches(ms: Match[]) {
+		for (const m of ms) this.m.set(m.id, { ...m });
 	}
 }
 

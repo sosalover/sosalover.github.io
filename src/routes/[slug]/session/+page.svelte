@@ -64,6 +64,17 @@
 {#if !data.unlocked}
 	<p class="card msg error mt-6">Unlock the ladder on its main page first.</p>
 {:else}
+	{#if data.lastSession}
+		<form method="POST" action="?/undo" class="card last-session mt-6" use:enhance>
+			<span class="small">
+				Last session: {data.lastSession.count} match{data.lastSession.count === 1 ? '' : 'es'} on
+				{data.lastSession.date}
+			</span>
+			<input type="hidden" name="session" value={data.lastSession.id} />
+			<button class="underline font-label">Undo</button>
+		</form>
+	{/if}
+
 	<h2 id="who">Who played</h2>
 	{#if data.standings.length < 2}
 		<p class="muted">Add at least two players on the ladder page first.</p>
@@ -174,6 +185,19 @@
 {/if}
 
 <style>
+	.last-session {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+	.last-session button {
+		min-height: 2.75rem;
+		padding: 0 0.5rem;
+		font-weight: 700;
+		color: var(--sun-red);
+		cursor: pointer;
+	}
 	.back {
 		display: inline-block;
 		padding: 0.5rem 0;

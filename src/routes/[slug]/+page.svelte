@@ -46,6 +46,20 @@
 <h1>Squash ladder</h1>
 <p class="muted mt-1">Elo ratings · everyone starts at 1000</p>
 
+{#if data.deleted}
+	<form method="POST" action="?/restore" class="card notice mt-6" role="status" use:enhance>
+		<span>Deleted: {data.deleted.label}.</span>
+		<input type="hidden" name="target" value={data.deleted.target} />
+		<button class="underline font-label">Undo</button>
+	</form>
+{:else if data.restored}
+	<p class="card notice mt-6" role="status">
+		Restored {data.restored} match{data.restored === 1 ? '' : 'es'}.
+	</p>
+{:else if data.saved}
+	<p class="card notice mt-6" role="status">Match updated. Ratings recalculated.</p>
+{/if}
+
 {#if !data.configured}
 	<p class="card msg error mt-6">
 		The ladder’s storage isn’t connected yet. Add an Upstash Redis store to this Vercel project.
@@ -204,6 +218,14 @@
 				<span class="small muted shrink-0 text-right">
 					{fmtDate(m.date)}<br /><span class="up">+{m.delta}</span> /
 					<span class="down">−{m.delta}</span>
+					{#if data.unlocked}
+						<br /><a
+							href="{data.base}/match/{m.id}"
+							class="edit underline"
+							aria-label="Edit {nameOf(m.winnerId)} beat {nameOf(m.loserId)}, {fmtDate(m.date)}"
+							>Edit</a
+						>
+					{/if}
 				</span>
 			</li>
 		{/each}
@@ -250,6 +272,25 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+	.notice {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		background: #fdf6e3;
+		border-color: var(--mustard);
+	}
+	.notice button {
+		min-height: 2.75rem;
+		padding: 0 0.5rem;
+		font-weight: 700;
+		cursor: pointer;
+	}
+	.edit {
+		display: inline-block;
+		padding: 0.35rem 0 0.1rem;
+		color: var(--ink-soft);
 	}
 	.session-link {
 		display: flex;

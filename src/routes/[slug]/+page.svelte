@@ -71,6 +71,14 @@
 {/if}
 
 {#if data.unlocked}
+	<a href="{data.base}/session" class="session-link card mt-6">
+		<span>
+			<strong>Enter a session</strong><br />
+			<span class="small muted">Copy a whiteboard of who beat who, all at once</span>
+		</span>
+		<span aria-hidden="true">→</span>
+	</a>
+
 	<h2 id="log">Log a match</h2>
 	<form
 		method="POST"
@@ -242,6 +250,17 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+	.session-link {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		color: inherit;
+		text-decoration: none;
+	}
+	.session-link:hover strong {
+		text-decoration: underline;
 	}
 	.rating {
 		text-align: right;

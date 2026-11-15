@@ -20,6 +20,7 @@ interface Store {
 	matches(): Promise<Match[]>;
 	addPlayer(p: Player): Promise<void>;
 	addMatch(m: Match): Promise<void>;
+	addMatches(ms: Match[]): Promise<void>;
 }
 
 class RedisStore implements Store {
@@ -36,6 +37,9 @@ class RedisStore implements Store {
 	}
 	async addMatch(m: Match) {
 		await this.r.rpush(MATCHES, m);
+	}
+	async addMatches(ms: Match[]) {
+		if (ms.length) await this.r.rpush(MATCHES, ...ms);
 	}
 }
 
@@ -54,6 +58,9 @@ class MemoryStore implements Store {
 	}
 	async addMatch(m: Match) {
 		this.m.push(m);
+	}
+	async addMatches(ms: Match[]) {
+		this.m.push(...ms);
 	}
 }
 

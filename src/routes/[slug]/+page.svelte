@@ -158,7 +158,7 @@
 		aria-labelledby="unlock"
 		use:enhance={submit('unlock')}
 	>
-		{#if data.canWrite}
+		{#if data.passcodeRequired}
 			<div>
 				<label for="passcode">Passcode</label>
 				<input
@@ -202,7 +202,7 @@
 	</ul>
 {/if}
 
-{#if data.unlocked}
+{#if data.unlocked && data.passcodeRequired}
 	<form method="POST" action="?/lock" class="mt-8 text-center" use:enhance>
 		<button class="small muted underline">Lock this device</button>
 	</form>

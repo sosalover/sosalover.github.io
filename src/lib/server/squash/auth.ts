@@ -15,8 +15,9 @@ export function isLadderSlug(slug: string) {
 	return timingSafeEqual(sha256(slug), Buffer.from(SLUG_SHA256, 'hex'));
 }
 
+// Optional: with no SQUASH_PASSCODE set, anyone with the link can add players and log matches.
 function passcode(): string | null {
-	return env.SQUASH_PASSCODE || (dev ? 'dev' : null);
+	return env.SQUASH_PASSCODE || null;
 }
 
 /** Token stored in the cookie: changes when the passcode changes, so rotating it logs everyone out. */
@@ -24,7 +25,7 @@ function token(code: string) {
 	return sha256(`squash-ladder:${code}`).toString('hex');
 }
 
-export const passcodeConfigured = () => passcode() !== null;
+export const passcodeRequired = () => passcode() !== null;
 
 export function checkPasscode(attempt: string) {
 	const code = passcode();
@@ -33,8 +34,8 @@ export function checkPasscode(attempt: string) {
 
 export function isUnlocked(cookies: Cookies) {
 	const code = passcode();
-	const value = cookies.get(COOKIE);
-	return code !== null && !!value && value === token(code);
+	if (code === null) return true;
+	return cookies.get(COOKIE) === token(code);
 }
 
 export function unlock(cookies: Cookies, path: string) {

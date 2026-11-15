@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { isLadderSlug, isUnlocked, passcodeConfigured } from '$lib/server/squash/auth';
+import { isLadderSlug, isUnlocked, passcodeRequired } from '$lib/server/squash/auth';
 import { getStore } from '$lib/server/squash/store';
 import { computeLadder } from '$lib/server/squash/elo';
 import type { LayoutServerLoad } from './$types';
@@ -23,7 +23,7 @@ export const load: LayoutServerLoad = async ({ params, cookies, setHeaders }) =>
 			base,
 			configured: false,
 			unlocked: false,
-			canWrite: false,
+			passcodeRequired: false,
 			standings: [],
 			matches: []
 		};
@@ -37,7 +37,7 @@ export const load: LayoutServerLoad = async ({ params, cookies, setHeaders }) =>
 		base,
 		configured: true,
 		unlocked,
-		canWrite: passcodeConfigured(),
+		passcodeRequired: passcodeRequired(),
 		...ladder
 	};
 };

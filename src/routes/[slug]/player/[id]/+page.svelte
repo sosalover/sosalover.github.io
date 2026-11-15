@@ -57,6 +57,24 @@
 	</div>
 </dl>
 
+{#if data.headToHead.length}
+	<h2 id="h2h">Head to head</h2>
+	<ul class="card h2h" aria-labelledby="h2h">
+		{#each data.headToHead as o (o.id)}
+			{@const total = o.wins + o.losses}
+			<li>
+				<a href="{data.base}/player/{o.id}" class="opp underline">{o.name}</a>
+				<span class="bar" aria-hidden="true">
+					<span class="bar-win" style="width: {(o.wins / total) * 100}%"></span>
+				</span>
+				<span class="font-label rec" aria-label="{o.wins} wins, {o.losses} losses">
+					<span class="up">{o.wins}</span>–<span class="down">{o.losses}</span>
+				</span>
+			</li>
+		{/each}
+	</ul>
+{/if}
+
 <h2 id="history">Match history</h2>
 {#if data.history.length === 0}
 	<p class="muted">No matches yet.</p>
@@ -94,6 +112,43 @@
 {/if}
 
 <style>
+	.h2h {
+		list-style: none;
+		margin: 0;
+		padding: 0.25rem 1rem;
+	}
+	.h2h li {
+		display: grid;
+		grid-template-columns: minmax(0, 7rem) 1fr auto;
+		align-items: center;
+		gap: 0.75rem;
+		min-height: 2.75rem;
+	}
+	.h2h li + li {
+		border-top: 1px solid var(--rule);
+	}
+	.opp {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.bar {
+		height: 0.4rem;
+		border-radius: 999px;
+		background: var(--sun-red);
+		opacity: 0.85;
+		overflow: hidden;
+	}
+	.bar-win {
+		display: block;
+		height: 100%;
+		background: #2f6b3a;
+	}
+	.rec {
+		font-weight: 700;
+		min-width: 2.5rem;
+		text-align: right;
+	}
 	.day + .day {
 		margin-top: 1rem;
 	}

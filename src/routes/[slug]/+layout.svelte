@@ -4,7 +4,7 @@
 
 <svelte:head>
 	<meta name="robots" content="noindex, nofollow, noarchive" />
-	<meta name="referrer" content="no-referrer" />
+	<meta name="referrer" content="same-origin" />
 </svelte:head>
 
 <div class="squash">

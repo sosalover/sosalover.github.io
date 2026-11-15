@@ -102,8 +102,16 @@
 							</a>
 							{#if m.score}<span class="muted"> · {m.score}</span>{/if}
 						</span>
-						<span class="font-label shrink-0 {won ? 'up' : 'down'}">{won ? '+' : '−'}{m.delta}</span
-						>
+						<span class="shrink-0 text-right">
+							<span class="font-label {won ? 'up' : 'down'}">{won ? '+' : '−'}{m.delta}</span>
+							{#if data.unlocked}
+								<br /><a
+									href="{data.base}/match/{m.id}"
+									class="small underline muted"
+									aria-label="Edit match vs {nameOf(won ? m.loserId : m.winnerId)}">Edit</a
+								>
+							{/if}
+						</span>
 					</li>
 				{/each}
 			</ul>

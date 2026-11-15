@@ -1,10 +1,21 @@
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { randomUUID } from 'node:crypto';
 import { isLadderSlug, isUnlocked } from '$lib/server/squash/auth';
 import { getStore, type Match } from '$lib/server/squash/store';
-import type { Actions } from './$types';
+import { readMatchDate } from '$lib/server/squash/dates';
+import type { Actions, PageServerLoad } from './$types';
 
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+/** The most recent session that still has live matches, for the Undo button. */
+export const load: PageServerLoad = async () => {
+	const store = getStore();
+	if (!store) return { lastSession: null };
+	const live = (await store.matches()).filter((m) => m.sessionId && !m.deletedAt);
+	if (!live.length) return { lastSession: null };
+	const latest = live.reduce((a, b) => (b.createdAt > a.createdAt ? b : a));
+	const count = live.filter((m) => m.sessionId === latest.sessionId).length;
+	return { lastSession: { id: latest.sessionId!, date: latest.date, count } };
+};
+
 const MAX_PER_PAIR = 30;
 const MAX_TOTAL = 300;
 
@@ -18,17 +29,13 @@ export const actions: Actions = {
 		if (!store) return fail(503, { error: 'Storage is not set up yet.' });
 
 		const data = await request.formData();
-		const today = String(data.get('today') ?? '');
-		let date = String(data.get('date') ?? '').trim();
-		if (!date) date = DATE_RE.test(today) ? today : new Date().toISOString().slice(0, 10);
-		if (!DATE_RE.test(date) || Number.isNaN(Date.parse(date))) {
-			return fail(400, { error: 'That date doesn’t look right.' });
-		}
-		const tomorrow = new Date(Date.now() + 36 * 3600 * 1000).toISOString().slice(0, 10);
-		if (date > tomorrow) return fail(400, { error: 'That date is in the future.' });
+		const parsed = readMatchDate(data);
+		if ('error' in parsed) return fail(400, { error: parsed.error });
+		const { date } = parsed;
 
 		const ids = new Set((await store.players()).map((p) => p.id));
 		const now = Date.now();
+		const sessionId = randomUUID();
 		const matches: Match[] = [];
 		for (const [key, value] of data) {
 			if (!key.startsWith('beat:')) continue;
@@ -48,7 +55,8 @@ export const actions: Actions = {
 					loserId,
 					score: null,
 					date,
-					createdAt: now + matches.length
+					createdAt: now + matches.length,
+					sessionId
 				});
 			}
 		}
@@ -56,10 +64,23 @@ export const actions: Actions = {
 		if (matches.length > MAX_TOTAL)
 			return fail(400, { error: 'That’s too many matches for one session.' });
 
-		await store.addMatches(matches);
+		await store.putMatches(matches);
 		return {
 			ok: `Logged ${matches.length} match${matches.length === 1 ? '' : 'es'} for ${date}.`,
 			date
 		};
+	},
+
+	undo: async ({ params, request, cookies }) => {
+		if (!isLadderSlug(params.slug)) return fail(404, { error: 'Not found' });
+		if (!isUnlocked(cookies)) return fail(401, { error: 'Enter the passcode first.' });
+		const store = getStore();
+		if (!store) return fail(503, { error: 'Storage is not set up yet.' });
+		const sessionId = String((await request.formData()).get('session') ?? '');
+		const now = Date.now();
+		const hit = (await store.matches()).filter((m) => m.sessionId === sessionId && !m.deletedAt);
+		if (!hit.length) return fail(400, { error: 'That session is already gone.' });
+		await store.putMatches(hit.map((m) => ({ ...m, deletedAt: now })));
+		redirect(303, `/${params.slug}?deleted=session:${sessionId}`);
 	}
 };

@@ -12,7 +12,7 @@ export const load: LayoutServerLoad = async ({ params, cookies, setHeaders }) =>
 
 	setHeaders({
 		'X-Robots-Tag': 'noindex, nofollow, noarchive',
-		'Referrer-Policy': 'no-referrer',
+		'Referrer-Policy': 'same-origin',
 		'Cache-Control': 'private, no-store'
 	});
 
@@ -30,7 +30,10 @@ export const load: LayoutServerLoad = async ({ params, cookies, setHeaders }) =>
 	}
 
 	const [players, matches] = await Promise.all([store.players(), store.matches()]);
-	const ladder = computeLadder(players, matches);
+	const ladder = computeLadder(
+		players,
+		matches.filter((m) => !m.deletedAt)
+	);
 	const unlocked = isUnlocked(cookies);
 
 	return {

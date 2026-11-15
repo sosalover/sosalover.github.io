@@ -113,10 +113,10 @@
     ]}
   ></SectionGallery>
 </SectionWithStickyHeader>
-<SectionWithStickyHeader title="Floating Nightstands">
+<SectionWithStickyHeader title="Nightstands">
   <SectionGallery
-    title="Floating Nightstands"
-    paragraph="A pair of wall-mounted nightstands built from plywood, with an open shelf for a lamp and charging cables tucked out of sight."
+    title="Nightstands"
+    paragraph="A pair of freestanding plywood nightstands, each a simple box with an open cubby and room to run a charging cable through."
     images={[
       {
         src: "/images/physical-creations/nightstand-build.jpg",
@@ -125,8 +125,8 @@
       },
       {
         src: "/images/physical-creations/nightstand-finished.jpg",
-        alt: "a finished plywood nightstand mounted on the wall next to a bed",
-        caption: "Mounted next to the bed.",
+        alt: "a finished plywood nightstand standing on the floor next to a bed",
+        caption: "Finished, next to the bed.",
       },
     ]}
   ></SectionGallery>

@@ -1,24 +1,12 @@
 <script lang="ts">
 	import RatingChart from '$lib/squash/RatingChart.svelte';
+	import DaySummary from '$lib/squash/DaySummary.svelte';
 
 	let { data } = $props();
 
 	const chartDays = $derived(data.ratingDays[data.player.id] ?? []);
 	let picked = $state<string | null>(null);
 	const shownDay = $derived(chartDays.find((d) => d.date === picked) ?? chartDays.at(-1));
-	// The day's matches rolled up per opponent: "Arman 5–0 +80".
-	const dayOpponents = $derived.by(() => {
-		const rows = new Map<string, { id: string; wins: number; losses: number; net: number }>();
-		for (const o of shownDay?.opponents ?? []) {
-			const r = rows.get(o.id) ?? { id: o.id, wins: 0, losses: 0, net: 0 };
-			if (o.won) r.wins++;
-			else r.losses++;
-			r.net += o.delta;
-			rows.set(o.id, r);
-		}
-		return [...rows.values()].sort((a, b) => b.wins + b.losses - (a.wins + a.losses));
-	});
-
 	const nameOf = (id: string) => data.standings.find((p) => p.id === id)?.name ?? '?';
 	// Same-day matches are scored together, so show each day's net change as one step.
 	const days = $derived.by(() => {
@@ -93,33 +81,7 @@
 			label="{data.player.name}'s rating at the end of each day played"
 		/>
 		{#if shownDay}
-			<div class="summary" aria-live="polite">
-				<p class="sum-head">
-					<span class="font-label">{fmtDate(shownDay.date)}</span>
-					<span>
-						<span class="font-label"
-							><span class="up">{shownDay.wins}</span>–<span class="down">{shownDay.losses}</span
-							></span
-						>
-						<span class="muted">·</span>
-						<span class="font-label {shownDay.net >= 0 ? 'up' : 'down'}"
-							>{shownDay.net >= 0 ? '+' : '−'}{Math.abs(shownDay.net)}</span
-						>
-						<span class="muted">→ <strong class="rating-now">{shownDay.rating}</strong></span>
-					</span>
-				</p>
-				<ul class="opps small">
-					{#each dayOpponents as o (o.id)}
-						<li>
-							{nameOf(o.id)}
-							<span class="font-label"
-								><span class="up">{o.wins}</span>–<span class="down">{o.losses}</span></span
-							>
-							<span class="muted">{o.net >= 0 ? '+' : '−'}{Math.abs(o.net)}</span>
-						</li>
-					{/each}
-				</ul>
-			</div>
+			<DaySummary day={shownDay} {nameOf} />
 		{/if}
 	{/if}
 </div>
@@ -187,33 +149,6 @@
 {/if}
 
 <style>
-	.summary {
-		margin-top: 0.75rem;
-		padding-top: 0.75rem;
-		border-top: 1px solid var(--rule);
-	}
-	.sum-head {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		gap: 0.25rem 1rem;
-		margin: 0;
-	}
-	.rating-now {
-		color: var(--ink);
-		font-family: var(--font-label);
-	}
-	.opps {
-		list-style: none;
-		margin: 0.4rem 0 0;
-		padding: 0;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.2rem 1rem;
-	}
-	.opps li {
-		white-space: nowrap;
-	}
 	.h2h {
 		list-style: none;
 		margin: 0;

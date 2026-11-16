@@ -7,11 +7,17 @@
 	let {
 		series,
 		selected = $bindable(null),
+		focus = $bindable(null),
 		label
 	}: {
 		series: ChartSeries[];
 		/** The tapped day (YYYY-MM-DD); the parent shows its summary. */
 		selected?: string | null;
+		/**
+		 * With several series: the highlighted player (tapping a line sets it). The others
+		 * fade to grey; there's no legend, the parent names the focused player instead.
+		 */
+		focus?: string | null;
 		label: string;
 	} = $props();
 
@@ -35,7 +41,16 @@
 			]
 		}))
 	);
-	const dates = $derived([...new Set(drawn.flatMap((s) => s.days.map((d) => d.date)))].sort());
+	const multi = $derived(drawn.length > 1);
+	const focused = $derived(multi ? lines.find((l) => l.id === focus) : lines[0]);
+	// Draw the focused line last so it sits on top.
+	const ordered = $derived(focused ? [...lines.filter((l) => l !== focused), focused] : lines);
+	// The days that can be selected: the focused player's, or (one series) everyone's.
+	const dates = $derived(
+		multi
+			? (focused?.days.map((d) => d.date) ?? [])
+			: [...new Set(drawn.flatMap((s) => s.days.map((d) => d.date)))].sort()
+	);
 
 	const x0 = $derived(Math.min(...lines.map((l) => l.pts[0].x)));
 	const x1 = $derived(Math.max(...lines.map((l) => l.pts.at(-1)!.x)));
@@ -88,18 +103,71 @@
 	const dense = $derived(dates.length > 40);
 	const sel = $derived(selected && dates.includes(selected) ? selected : null);
 
+	const nearestDate = (ds: string[], px: number) =>
+		ds.reduce((best, d) =>
+			Math.abs(sx(toNum(d)) - px) < Math.abs(sx(toNum(best)) - px) ? d : best
+		);
+
+	/** Distance from a point to a polyline, in screen pixels. */
+	function distTo(pts: { x: number; y: number }[], px: number, py: number) {
+		let best = Infinity;
+		for (let i = 0; i < pts.length; i++) {
+			const ax = sx(pts[i].x);
+			const ay = sy(pts[i].y);
+			const b = pts[i + 1] ?? pts[i];
+			const bx = sx(b.x);
+			const by = sy(b.y);
+			const len = (bx - ax) ** 2 + (by - ay) ** 2;
+			const t = len
+				? Math.max(0, Math.min(1, ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) / len))
+				: 0;
+			best = Math.min(best, Math.hypot(px - (ax + t * (bx - ax)), py - (ay + t * (by - ay))));
+		}
+		return best;
+	}
+
 	let svg: SVGSVGElement;
-	function pick(e: PointerEvent) {
-		if (!dates.length) return;
+	function pick(e: PointerEvent, pressed: boolean) {
 		const r = svg.getBoundingClientRect();
 		const px = ((e.clientX - r.left) / r.width) * width;
-		let best = dates[0];
-		for (const d of dates) {
-			if (Math.abs(sx(toNum(d)) - px) < Math.abs(sx(toNum(best)) - px)) best = d;
+		const py = ((e.clientY - r.top) / r.height) * H;
+		if (!multi) {
+			if (dates.length) selected = nearestDate(dates, px);
+			return;
 		}
-		selected = best;
+		// A fresh tap picks the nearest line; dragging keeps the line and scrubs its days.
+		let line = focused;
+		if (pressed || !line) {
+			const near = lines.map((l) => ({ l, d: distTo(l.pts, px, py) })).sort((a, b) => a.d - b.d)[0];
+			if (!near || near.d > 28) {
+				// A tap on empty space clears the highlight.
+				if (pressed) focus = selected = null;
+				return;
+			}
+			line = near.l;
+		}
+		focus = line.id;
+		selected = nearestDate(
+			line.days.map((d) => d.date),
+			px
+		);
 	}
 	function key(e: KeyboardEvent) {
+		if (multi && (e.key === 'ArrowUp' || e.key === 'ArrowDown' || !focused)) {
+			// Up/Down moves between players, top rating first.
+			const byRating = [...lines].sort((a, b) => b.pts.at(-1)!.y - a.pts.at(-1)!.y);
+			const k = focused ? byRating.indexOf(focused) : -1;
+			const next =
+				e.key === 'ArrowUp'
+					? byRating[Math.max(0, k - 1)]
+					: byRating[Math.min(byRating.length - 1, k + 1)];
+			if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+				e.preventDefault();
+				focus = next.id;
+				selected = next.days.at(-1)!.date;
+			}
+			return;
+		}
 		const i = sel ? dates.indexOf(sel) : dates.length;
 		let j = i;
 		if (e.key === 'ArrowLeft') j = Math.max(0, i - 1);
@@ -120,13 +188,15 @@
 		height={H}
 		role="slider"
 		tabindex="0"
-		aria-label="{label}. Use the arrow keys to step through days."
+		aria-label="{label}. Use the arrow keys to step through days{multi
+			? ', up and down to change player'
+			: ''}."
 		aria-valuemin={0}
 		aria-valuemax={Math.max(dates.length - 1, 0)}
 		aria-valuenow={sel ? dates.indexOf(sel) : dates.length - 1}
 		aria-valuetext={sel ?? dates.at(-1)}
-		onpointerdown={pick}
-		onpointermove={(e) => (e.pointerType === 'mouse' || e.buttons) && pick(e)}
+		onpointerdown={(e) => pick(e, true)}
+		onpointermove={(e) => (e.buttons || (e.pointerType === 'mouse' && !multi)) && pick(e, false)}
 		onkeydown={key}
 	>
 		<!-- Grid and y axis -->
@@ -165,17 +235,45 @@
 			<line class="cross" x1={sx(toNum(sel))} x2={sx(toNum(sel))} y1={M.top} y2={M.top + plotH} />
 		{/if}
 
-		<!-- Lines -->
-		{#each lines as l (l.id)}
-			<path d={path(l.pts)} fill="none" stroke={l.color} stroke-width="2" stroke-linejoin="round" />
-			{#each l.pts as p, i (i)}
-				{#if p.date === sel && sel}
-					<circle class="ring" cx={sx(p.x)} cy={sy(p.y)} r="5.5" fill={l.color} />
-				{:else if !dense || i === l.pts.length - 1}
-					<circle class="ring" cx={sx(p.x)} cy={sy(p.y)} r={p.date ? 4 : 3} fill={l.color} />
-				{/if}
-			{/each}
+		<!-- Lines. With several players, only the focused one is coloured and dotted. -->
+		{#each ordered as l (l.id)}
+			{#if l === focused}
+				<path
+					d={path(l.pts)}
+					fill="none"
+					stroke={l.color}
+					stroke-width="2.5"
+					stroke-linejoin="round"
+				/>
+				{#each l.pts as p, i (i)}
+					{#if p.date === sel && sel}
+						<circle class="ring" cx={sx(p.x)} cy={sy(p.y)} r="5.5" fill={l.color} />
+					{:else if !dense || i === l.pts.length - 1}
+						<circle class="ring" cx={sx(p.x)} cy={sy(p.y)} r={p.date ? 4 : 3} fill={l.color} />
+					{/if}
+				{/each}
+			{:else}
+				<path
+					d={path(l.pts)}
+					fill="none"
+					class="faint"
+					class:faded={!!focused}
+					stroke-width="1.5"
+					stroke-linejoin="round"
+				/>
+			{/if}
 		{/each}
+		<!-- Name the focused line beside its selected (or latest) point, in place of a legend. -->
+		{#if multi && focused}
+			{@const p = focused.pts.find((q) => q.date === sel) ?? focused.pts.at(-1)!}
+			{@const right = sx(p.x) > M.left + plotW / 2}
+			<text
+				class="name"
+				x={sx(p.x) + (right ? -9 : 9)}
+				y={sy(p.y) + (sy(p.y) < M.top + 16 ? 16 : -9)}
+				text-anchor={right ? 'end' : 'start'}>{focused.name}</text
+			>
+		{/if}
 	</svg>
 </div>
 
@@ -216,6 +314,23 @@
 		stroke: var(--ink);
 		stroke-width: 1;
 		opacity: 0.45;
+	}
+	.faint {
+		stroke: var(--ink-soft);
+		opacity: 0.6;
+	}
+	.faint.faded {
+		opacity: 0.22;
+	}
+	.name {
+		font-family: var(--font-label);
+		font-size: 12px;
+		font-weight: 700;
+		fill: var(--ink);
+		paint-order: stroke;
+		stroke: var(--card);
+		stroke-width: 3px;
+		stroke-linejoin: round;
 	}
 	.ring {
 		stroke: var(--card);

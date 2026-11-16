@@ -2,7 +2,8 @@
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
-	import Sparkline from '$lib/squash/Sparkline.svelte';
+	import RatingChart from '$lib/squash/RatingChart.svelte';
+	import DaySummary from '$lib/squash/DaySummary.svelte';
 
 	let { data, form } = $props();
 	// Every action returns this shape; the generated union is too narrow to narrow on `form`.
@@ -32,15 +33,33 @@
 		};
 	}
 
-	// Every sparkline shares one time axis, so the rows line up by date.
-	const span = $derived.by(() => {
-		const days = Object.values(data.ratingDays)
-			.flat()
-			.map((d) => d.date);
-		if (!days.length) return null;
-		days.sort();
-		return { from: days[0], to: days.at(-1)! };
-	});
+	// Combined chart: every player who has played, one grey line each, no legend.
+	// Tapping a line or a leaderboard row highlights that player and shows their day.
+	const charted = $derived(
+		data.standings
+			.filter((p) => data.ratingDays[p.id]?.length)
+			.map((p) => ({ id: p.id, name: p.name, color: 'var(--line)', days: data.ratingDays[p.id] }))
+	);
+	let focus = $state<string | null>(null);
+	let picked = $state<string | null>(null);
+	const focusedPlayer = $derived(data.standings.find((p) => p.id === focus));
+	const focusDays = $derived(focus ? (data.ratingDays[focus] ?? []) : []);
+	const shownDay = $derived(focusDays.find((d) => d.date === picked) ?? focusDays.at(-1));
+	let chartCard = $state<HTMLElement>();
+
+	function highlight(id: string) {
+		if (focus === id) {
+			focus = picked = null;
+			return;
+		}
+		focus = id;
+		picked = data.ratingDays[id]?.at(-1)?.date ?? null;
+		// Bring the chart into view if it's off screen, so the tap visibly does something.
+		const r = chartCard?.getBoundingClientRect();
+		if (r && (r.top < 64 || r.bottom > innerHeight)) {
+			chartCard!.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+		}
+	}
 
 	const fmtDate = (d: string) =>
 		new Date(d + 'T12:00:00').toLocaleDateString(undefined, {
@@ -84,20 +103,46 @@
 	<ol class="card board" aria-labelledby="leaderboard">
 		{#each data.standings as p, i (p.id)}
 			<li>
-				<a href="{data.base}/player/{p.id}">
+				<button
+					type="button"
+					aria-pressed={focus === p.id}
+					class:on={focus === p.id}
+					onclick={() => highlight(p.id)}
+				>
 					<span class="rank font-label" aria-label="Rank {i + 1}">{i + 1}</span>
 					<span class="name">{p.name}</span>
 					<span class="record small muted">{p.wins}–{p.losses}</span>
-					<span class="spark">
-						{#if span && data.ratingDays[p.id]?.length}
-							<Sparkline days={data.ratingDays[p.id]} from={span.from} to={span.to} />
-						{/if}
-					</span>
 					<span class="rating font-label">{p.rating}</span>
-				</a>
+				</button>
 			</li>
 		{/each}
 	</ol>
+{/if}
+
+{#if charted.length}
+	<h2 id="over-time">Ratings over time</h2>
+	<div class="card" aria-labelledby="over-time" bind:this={chartCard}>
+		<RatingChart
+			series={charted}
+			bind:focus
+			bind:selected={picked}
+			label="Everyone's rating at the end of each day they played"
+		/>
+		{#if focusedPlayer && shownDay}
+			<DaySummary
+				day={shownDay}
+				{nameOf}
+				player={{ name: focusedPlayer.name, href: `${data.base}/player/${focusedPlayer.id}` }}
+			/>
+		{:else if focusedPlayer}
+			<p class="hint small muted">
+				{focusedPlayer.name} hasn’t played yet ·
+				<a href="{data.base}/player/{focusedPlayer.id}" class="underline">Player page →</a>
+			</p>
+		{:else}
+			<p class="hint small muted">Tap a line, or a player above, to see their days.</p>
+		{/if}
+	</div>
 {/if}
 
 {#if data.unlocked}
@@ -263,9 +308,12 @@
 	.board li + li {
 		border-top: 1px solid var(--rule);
 	}
-	.board a {
+	.board button {
+		width: 100%;
+		text-align: left;
+		cursor: pointer;
 		display: grid;
-		grid-template-columns: 1.5rem minmax(0, 1fr) auto 4.5rem 3rem;
+		grid-template-columns: 2rem minmax(0, 1fr) auto 3.5rem;
 		align-items: center;
 		gap: 0.5rem;
 		min-height: 3.25rem;
@@ -273,13 +321,19 @@
 		color: inherit;
 		text-decoration: none;
 	}
-	.board a:hover .name {
-		text-decoration: underline;
+	@media (hover: hover) {
+		.board button:hover .name {
+			text-decoration: underline;
+		}
 	}
-	.spark {
-		display: flex;
-		align-items: center;
-		height: 1.75rem;
+	.board button.on {
+		background: color-mix(in srgb, var(--line) 10%, transparent);
+		box-shadow: inset 3px 0 0 var(--line);
+	}
+	.hint {
+		margin: 0.75rem 0 0;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--rule);
 	}
 	.rank {
 		color: var(--ink-soft);

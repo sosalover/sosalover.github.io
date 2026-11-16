@@ -18,15 +18,7 @@
 		--card: #fff;
 		--up: #2f6b3a;
 		--notice: #fdf6e3;
-		/* Chart series, in a fixed order validated for colour-blind separation. */
-		--s1: #2a78d6;
-		--s2: #eb6834;
-		--s3: #1baf7a;
-		--s4: #eda100;
-		--s5: #e87ba4;
-		--s6: #008300;
-		--s7: #6250d6;
-		--s8: #e34948;
+		--line: #2a78d6; /* rating charts */
 	}
 	@media (prefers-color-scheme: dark) {
 		:global(:root:has(.squash)) {
@@ -42,14 +34,7 @@
 			--card: #25211d;
 			--up: #7fc58a;
 			--notice: #2f2818;
-			--s1: #3987e5;
-			--s2: #d95926;
-			--s3: #199e70;
-			--s4: #c98500;
-			--s5: #d55181;
-			--s6: #0ca30c;
-			--s7: #9085e9;
-			--s8: #e66767;
+			--line: #3987e5;
 		}
 	}
 	.squash {

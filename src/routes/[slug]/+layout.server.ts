@@ -37,10 +37,6 @@ export const load: LayoutServerLoad = async ({ params, cookies, setHeaders }) =>
 	);
 	const unlocked = isUnlocked(cookies);
 
-	// Chart colour slot per player, by when they joined, so a player keeps their colour
-	// whatever their rank. There are eight colours; later players get a neutral line.
-	const joined = [...players].sort((a, b) => a.createdAt - b.createdAt).map((p) => p.id);
-	const standings = ladder.standings.map((s) => ({ ...s, slot: joined.indexOf(s.id) }));
 	const ratingDays = Object.fromEntries(
 		players.map((p) => [p.id, dailyHistory(p.id, ladder.matches)])
 	);
@@ -50,7 +46,7 @@ export const load: LayoutServerLoad = async ({ params, cookies, setHeaders }) =>
 		configured: true,
 		unlocked,
 		passcodeRequired: passcodeRequired(),
-		standings,
+		standings: ladder.standings,
 		matches: ladder.matches,
 		ratingDays
 	};

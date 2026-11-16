@@ -1,6 +1,5 @@
 <script lang="ts">
 	import RatingChart from '$lib/squash/RatingChart.svelte';
-	import { seriesColor } from '$lib/squash/colors';
 
 	let { data } = $props();
 
@@ -86,7 +85,7 @@
 				{
 					id: data.player.id,
 					name: data.player.name,
-					color: seriesColor(data.player.slot),
+					color: 'var(--line)',
 					days: chartDays
 				}
 			]}

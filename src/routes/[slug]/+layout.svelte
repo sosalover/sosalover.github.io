@@ -12,6 +12,46 @@
 </div>
 
 <style>
+	/* Ladder-only tokens. The ladder follows the device's light/dark setting; the rest of
+	   the site is light only, so dark mode is scoped to pages that contain the ladder. */
+	:global(:root:has(.squash)) {
+		--card: #fff;
+		--up: #2f6b3a;
+		--notice: #fdf6e3;
+		/* Chart series, in a fixed order validated for colour-blind separation. */
+		--s1: #2a78d6;
+		--s2: #eb6834;
+		--s3: #1baf7a;
+		--s4: #eda100;
+		--s5: #e87ba4;
+		--s6: #008300;
+		--s7: #6250d6;
+		--s8: #e34948;
+	}
+	@media (prefers-color-scheme: dark) {
+		:global(:root:has(.squash)) {
+			color-scheme: dark;
+			--paper: #1c1917;
+			--paper-alt: #29241f;
+			--ink: #eee7dc;
+			--ink-soft: #b8ac9c;
+			--sun-red: #ff7088;
+			--indigo: #8fb0cc;
+			--mustard: #e0b458;
+			--rule: rgba(238, 231, 220, 0.16);
+			--card: #25211d;
+			--up: #7fc58a;
+			--notice: #2f2818;
+			--s1: #3987e5;
+			--s2: #d95926;
+			--s3: #199e70;
+			--s4: #c98500;
+			--s5: #d55181;
+			--s6: #0ca30c;
+			--s7: #9085e9;
+			--s8: #e66767;
+		}
+	}
 	.squash {
 		max-width: 40rem;
 		margin: 0 auto;
@@ -35,7 +75,7 @@
 		margin: 2.25rem 0 0.75rem;
 	}
 	.squash :global(.card) {
-		background: #fff;
+		background: var(--card);
 		border: 1px solid var(--rule);
 		border-radius: 0.75rem;
 		padding: 1rem;
@@ -44,7 +84,7 @@
 		color: var(--ink-soft);
 	}
 	.squash :global(.up) {
-		color: #2f6b3a;
+		color: var(--up);
 	}
 	.squash :global(.down) {
 		color: var(--sun-red);
@@ -82,7 +122,7 @@
 		font-family: var(--font-label);
 		font-size: 1rem;
 		font-weight: 700;
-		color: #fff;
+		color: var(--paper);
 		background: var(--ink);
 		border-radius: 0.5rem;
 		cursor: pointer;
@@ -99,7 +139,7 @@
 		color: var(--sun-red);
 	}
 	.squash :global(.msg.ok) {
-		color: #2f6b3a;
+		color: var(--up);
 	}
 	.squash :global(.match-list) {
 		list-style: none;

@@ -2,6 +2,8 @@
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { onMount } from 'svelte';
+	import RatingChart from '$lib/squash/RatingChart.svelte';
+	import { seriesColor } from '$lib/squash/colors';
 
 	let { data, form } = $props();
 	// Every action returns this shape; the generated union is too narrow to narrow on `form`.
@@ -30,6 +32,37 @@
 			};
 		};
 	}
+
+	// Combined chart: everyone who has played, in join order so colours stay put.
+	// Eight colours are distinguishable; anyone past that is left off the chart.
+	const charted = $derived(
+		data.standings
+			.filter((p) => p.slot < 8 && data.ratingDays[p.id]?.length)
+			.sort((a, b) => a.slot - b.slot)
+			.map((p) => ({
+				id: p.id,
+				name: p.name,
+				color: seriesColor(p.slot),
+				days: data.ratingDays[p.id]
+			}))
+	);
+	const leftOff = $derived(
+		data.standings.filter((p) => p.slot >= 8 && data.ratingDays[p.id]?.length).length
+	);
+	const allDates = $derived([...new Set(charted.flatMap((c) => c.days.map((d) => d.date)))].sort());
+	let picked = $state<string | null>(null);
+	const shownDate = $derived(picked && allDates.includes(picked) ? picked : allDates.at(-1));
+	const dayRows = $derived(
+		charted.flatMap((c) => {
+			const d = c.days.find((x) => x.date === shownDate);
+			if (!d) return [];
+			// "Dino ×2, Asteris": each opponent once, with a count when played more than once.
+			const counts = new Map<string, number>();
+			for (const o of d.opponents) counts.set(o.id, (counts.get(o.id) ?? 0) + 1);
+			const opps = [...counts].map(([id, n]) => nameOf(id) + (n > 1 ? ` ×${n}` : '')).join(', ');
+			return [{ ...c, day: d, opps }];
+		})
+	);
 
 	const fmtDate = (d: string) =>
 		new Date(d + 'T12:00:00').toLocaleDateString(undefined, {
@@ -82,6 +115,55 @@
 			</li>
 		{/each}
 	</ol>
+{/if}
+
+{#if charted.length}
+	<h2 id="over-time">Ratings over time</h2>
+	<div class="card" aria-labelledby="over-time">
+		{#if charted.length > 1}
+			<ul class="legend small" aria-label="Players">
+				{#each charted as c (c.id)}
+					<li><span class="key" style="background: {c.color}"></span>{c.name}</li>
+				{/each}
+			</ul>
+		{/if}
+		<RatingChart
+			series={charted}
+			bind:selected={picked}
+			label="Everyone's rating at the end of each day they played"
+		/>
+		{#if shownDate}
+			<div class="summary" aria-live="polite">
+				<p class="font-label sum-date">{fmtDate(shownDate)}</p>
+				<ul class="day-rows small">
+					{#each dayRows as r (r.id)}
+						<li>
+							<span class="key" style="background: {r.color}" aria-hidden="true"></span>
+							<span class="who">
+								<strong>{r.name}</strong>
+								<span class="muted">vs {r.opps}</span>
+							</span>
+							<span class="font-label nums">
+								<span aria-label="{r.day.wins} won, {r.day.losses} lost"
+									><span class="up">{r.day.wins}</span>–<span class="down">{r.day.losses}</span
+									></span
+								>
+								<span class={r.day.net >= 0 ? 'up' : 'down'}
+									>{r.day.net >= 0 ? '+' : '−'}{Math.abs(r.day.net)}</span
+								>
+								<strong>{r.day.rating}</strong>
+							</span>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
+		{#if leftOff}
+			<p class="small muted mt-2">
+				{leftOff} more player{leftOff === 1 ? ' isn’t' : 's aren’t'} charted; see their pages.
+			</p>
+		{/if}
+	</div>
 {/if}
 
 {#if data.unlocked}
@@ -239,6 +321,57 @@
 {/if}
 
 <style>
+	.legend {
+		list-style: none;
+		margin: 0 0 0.5rem;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1rem;
+	}
+	.legend li {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+	.key {
+		display: inline-block;
+		width: 0.9rem;
+		height: 2px;
+		border-radius: 1px;
+		flex-shrink: 0;
+	}
+	.summary {
+		margin-top: 0.75rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--rule);
+	}
+	.sum-date {
+		margin: 0 0 0.3rem;
+	}
+	.day-rows {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.day-rows li {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: baseline;
+		gap: 0.5rem;
+		padding: 0.2rem 0;
+	}
+	.day-rows .key {
+		transform: translateY(-0.2rem);
+	}
+	.who {
+		min-width: 0;
+	}
+	.nums {
+		display: flex;
+		gap: 0.5rem;
+		white-space: nowrap;
+	}
 	.board {
 		list-style: none;
 		padding: 0.25rem 0;
@@ -278,7 +411,7 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
-		background: #fdf6e3;
+		background: var(--notice);
 		border-color: var(--mustard);
 	}
 	.notice button {

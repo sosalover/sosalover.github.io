@@ -76,3 +76,49 @@ export function computeLadder(players: Player[], matches: Match[]) {
 
 	return { standings, matches: rated.reverse() }; // newest first
 }
+
+export type DayOpponent = {
+	id: string;
+	won: boolean;
+	score: string | null;
+	delta: number; // signed, for this player
+};
+
+/** One point per day a player played: their end-of-day rating and what happened that day. */
+export type DayPoint = {
+	date: string; // YYYY-MM-DD
+	rating: number;
+	wins: number;
+	losses: number;
+	net: number;
+	opponents: DayOpponent[];
+};
+
+/**
+ * A player's rating history, one point per day played, oldest first. `matches`
+ * is computeLadder's output; all of a day's matches are applied together, so
+ * every match that day carries the same end-of-day rating.
+ */
+export function dailyHistory(playerId: string, matches: RatedMatch[]): DayPoint[] {
+	const days: DayPoint[] = [];
+	for (const m of [...matches].reverse()) {
+		const won = m.winnerId === playerId;
+		if (!won && m.loserId !== playerId) continue;
+		let day = days.at(-1);
+		if (day?.date !== m.date) {
+			day = { date: m.date, rating: 0, wins: 0, losses: 0, net: 0, opponents: [] };
+			days.push(day);
+		}
+		day.rating = won ? m.winnerAfter : m.loserAfter;
+		day.net = day.rating - (won ? m.winnerBefore : m.loserBefore);
+		if (won) day.wins++;
+		else day.losses++;
+		day.opponents.push({
+			id: won ? m.loserId : m.winnerId,
+			won,
+			score: m.score,
+			delta: won ? m.delta : -m.delta
+		});
+	}
+	return days;
+}

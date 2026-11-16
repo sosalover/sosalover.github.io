@@ -213,14 +213,14 @@
 		padding: 0 1rem;
 		border: 1px solid var(--rule);
 		border-radius: 999px;
-		background: #fff;
+		background: var(--card);
 		font-size: 1rem;
 		cursor: pointer;
 	}
 	.chip[aria-pressed='true'] {
 		background: var(--ink);
 		border-color: var(--ink);
-		color: #fff;
+		color: var(--paper);
 	}
 	.mode {
 		display: grid;
@@ -233,12 +233,12 @@
 	.mode button {
 		min-height: 2.75rem;
 		font-family: var(--font-label);
-		background: #fff;
+		background: var(--card);
 		cursor: pointer;
 	}
 	.mode button[aria-pressed='true'] {
 		background: var(--ink);
-		color: #fff;
+		color: var(--paper);
 	}
 	.grid-wrap {
 		padding: 0.5rem;
@@ -283,9 +283,9 @@
 		touch-action: manipulation;
 	}
 	.cell.filled {
-		background: #e3efe2;
-		border-color: #2f6b3a;
-		color: #2f6b3a;
+		background: color-mix(in srgb, var(--up) 14%, var(--card));
+		border-color: var(--up);
+		color: var(--up);
 	}
 	.self {
 		background: repeating-linear-gradient(

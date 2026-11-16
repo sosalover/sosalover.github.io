@@ -1,5 +1,12 @@
 <script lang="ts">
+	import RatingChart from '$lib/squash/RatingChart.svelte';
+	import { seriesColor } from '$lib/squash/colors';
+
 	let { data } = $props();
+
+	const chartDays = $derived(data.ratingDays[data.player.id] ?? []);
+	let picked = $state<string | null>(null);
+	const shownDay = $derived(chartDays.find((d) => d.date === picked) ?? chartDays.at(-1));
 
 	const nameOf = (id: string) => data.standings.find((p) => p.id === id)?.name ?? '?';
 	// Same-day matches are scored together, so show each day's net change as one step.
@@ -56,6 +63,53 @@
 		<dd>{data.player.wins}–{data.player.losses}</dd>
 	</div>
 </dl>
+
+<h2 id="chart">Rating over time</h2>
+<div class="card" aria-labelledby="chart">
+	{#if chartDays.length === 0}
+		<p class="muted">No matches yet. The chart starts after the first one.</p>
+	{:else}
+		<RatingChart
+			series={[
+				{
+					id: data.player.id,
+					name: data.player.name,
+					color: seriesColor(data.player.slot),
+					days: chartDays
+				}
+			]}
+			bind:selected={picked}
+			label="{data.player.name}'s rating at the end of each day played"
+		/>
+		{#if shownDay}
+			<div class="summary" aria-live="polite">
+				<p class="sum-head">
+					<span class="font-label">{fmtDate(shownDay.date)}</span>
+					<span>
+						<span class="font-label"
+							><span class="up">{shownDay.wins}</span>–<span class="down">{shownDay.losses}</span
+							></span
+						>
+						<span class="muted">·</span>
+						<span class="font-label {shownDay.net >= 0 ? 'up' : 'down'}"
+							>{shownDay.net >= 0 ? '+' : '−'}{Math.abs(shownDay.net)}</span
+						>
+						<span class="muted">→ <strong class="rating-now">{shownDay.rating}</strong></span>
+					</span>
+				</p>
+				<ul class="opps small">
+					{#each shownDay.opponents as o, i (i)}
+						<li>
+							<span class={o.won ? 'up' : 'down'}>{o.won ? 'W' : 'L'}</span>
+							{nameOf(o.id)}{#if o.score}<span class="muted"> {o.score}</span>{/if}
+							<span class="muted">{o.delta >= 0 ? '+' : '−'}{Math.abs(o.delta)}</span>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
+	{/if}
+</div>
 
 {#if data.headToHead.length}
 	<h2 id="h2h">Head to head</h2>
@@ -120,6 +174,37 @@
 {/if}
 
 <style>
+	.summary {
+		margin-top: 0.75rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--rule);
+	}
+	.sum-head {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.25rem 1rem;
+		margin: 0;
+	}
+	.rating-now {
+		color: var(--ink);
+		font-family: var(--font-label);
+	}
+	.opps {
+		list-style: none;
+		margin: 0.4rem 0 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.2rem 1rem;
+	}
+	.opps li {
+		white-space: nowrap;
+	}
+	.opps li > span:first-child {
+		font-family: var(--font-label);
+		font-weight: 700;
+	}
 	.h2h {
 		list-style: none;
 		margin: 0;
@@ -150,7 +235,7 @@
 	.bar-win {
 		display: block;
 		height: 100%;
-		background: #2f6b3a;
+		background: var(--up);
 	}
 	.rec {
 		font-weight: 700;

@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { isLadderSlug, isUnlocked, passcodeRequired } from '$lib/server/squash/auth';
 import { getStore } from '$lib/server/squash/store';
-import { computeLadder } from '$lib/server/squash/elo';
+import { computeLadder, dailyHistory, type DayPoint } from '$lib/server/squash/elo';
 import type { LayoutServerLoad } from './$types';
 
 // The rest of the site is prerendered; the ladder is live data.
@@ -25,7 +25,8 @@ export const load: LayoutServerLoad = async ({ params, cookies, setHeaders }) =>
 			unlocked: false,
 			passcodeRequired: false,
 			standings: [],
-			matches: []
+			matches: [],
+			ratingDays: {} as Record<string, DayPoint[]>
 		};
 	}
 
@@ -36,11 +37,21 @@ export const load: LayoutServerLoad = async ({ params, cookies, setHeaders }) =>
 	);
 	const unlocked = isUnlocked(cookies);
 
+	// Chart colour slot per player, by when they joined, so a player keeps their colour
+	// whatever their rank. There are eight colours; later players get a neutral line.
+	const joined = [...players].sort((a, b) => a.createdAt - b.createdAt).map((p) => p.id);
+	const standings = ladder.standings.map((s) => ({ ...s, slot: joined.indexOf(s.id) }));
+	const ratingDays = Object.fromEntries(
+		players.map((p) => [p.id, dailyHistory(p.id, ladder.matches)])
+	);
+
 	return {
 		base,
 		configured: true,
 		unlocked,
 		passcodeRequired: passcodeRequired(),
-		...ladder
+		standings,
+		matches: ladder.matches,
+		ratingDays
 	};
 };

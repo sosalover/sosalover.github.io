@@ -7,6 +7,18 @@
 	const chartDays = $derived(data.ratingDays[data.player.id] ?? []);
 	let picked = $state<string | null>(null);
 	const shownDay = $derived(chartDays.find((d) => d.date === picked) ?? chartDays.at(-1));
+	// The day's matches rolled up per opponent: "Arman 5–0 +80".
+	const dayOpponents = $derived.by(() => {
+		const rows = new Map<string, { id: string; wins: number; losses: number; net: number }>();
+		for (const o of shownDay?.opponents ?? []) {
+			const r = rows.get(o.id) ?? { id: o.id, wins: 0, losses: 0, net: 0 };
+			if (o.won) r.wins++;
+			else r.losses++;
+			r.net += o.delta;
+			rows.set(o.id, r);
+		}
+		return [...rows.values()].sort((a, b) => b.wins + b.losses - (a.wins + a.losses));
+	});
 
 	const nameOf = (id: string) => data.standings.find((p) => p.id === id)?.name ?? '?';
 	// Same-day matches are scored together, so show each day's net change as one step.
@@ -98,11 +110,13 @@
 					</span>
 				</p>
 				<ul class="opps small">
-					{#each shownDay.opponents as o, i (i)}
+					{#each dayOpponents as o (o.id)}
 						<li>
-							<span class={o.won ? 'up' : 'down'}>{o.won ? 'W' : 'L'}</span>
-							{nameOf(o.id)}{#if o.score}<span class="muted"> {o.score}</span>{/if}
-							<span class="muted">{o.delta >= 0 ? '+' : '−'}{Math.abs(o.delta)}</span>
+							{nameOf(o.id)}
+							<span class="font-label"
+								><span class="up">{o.wins}</span>–<span class="down">{o.losses}</span></span
+							>
+							<span class="muted">{o.net >= 0 ? '+' : '−'}{Math.abs(o.net)}</span>
 						</li>
 					{/each}
 				</ul>
@@ -200,10 +214,6 @@
 	}
 	.opps li {
 		white-space: nowrap;
-	}
-	.opps li > span:first-child {
-		font-family: var(--font-label);
-		font-weight: 700;
 	}
 	.h2h {
 		list-style: none;
